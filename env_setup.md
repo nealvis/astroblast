@@ -1,30 +1,25 @@
-# c64_samples_kick
-This is a repository of Commodore 64 sample programs that are built using the Kick Assmebler.  Each directory usually contains a small example program demonstrating just one or a few concepts.  The programs can be executed/tested on the VICE C64 emulator running on Windows or loaded onto to a real Commodore 64.
+# Environment and Tools Setup for Astroblast
+To setup a development environment to build and run astroblast follow the following steps.  The versions used for development are mentioned but there is no known dependency on particular versions.
 
-# Setup
-To setup a development environment to build and run these sampes follow the following steps
+1. OS used for development: **Windows 10 Pro**, build: 19043.1165.  Most if not all of these tools are available for other OSes as well but that hasn't been tried.
 
-- Install the latest java runtime
+2. Install the latest **java runtime**
   - Download from here: https://www.java.com/en/download/manual.jsp
-  - I used version 1.8.0_291
+  - Version for developmentersion for development: 1.8.0_291
 
-- Install Kick Assembler.  This is an assembler specifically for C64 code.
+3. Install **Kick Assembler**.  This is an assembler specifically for C64 code.
   - Download the latest released version here: http://theweb.dk/KickAssembler
-  - I used version: V5.20  
+  - VersiVersion for development:ment: V5.20  
 
-- Install the VICE C64 emulator 
+4. Install the **VICE C64 emulator**. Technically not required if you want to run the result on real C64 hardware, but definitely convienent as it lets you run the software right on your development machine.
   - Download the latest version here: https://vice-emu.sourceforge.io/
-  - I used version 3.5
+  - Version for development: 3.5
 
-- Install C64 debugger to use.
-  - Download lastest from here: https://sourceforge.net/projects/c64-debugger/
-  - I used version v0.64.58.4
-
-- Select a code editor, I used VS Code
+5. Install **VS Code**.  This IDE along with the Kick Assembler extension was used to build the code rather than scripts or makefiles
   - Download from here: https://code.visualstudio.com/
-  - I used version 1.56.2
+  - Version for development: 1.56.2
 
-- Install the Kick Assembler IDE Extension for VS Code Named "Kick Assembler (C64) for Visual Studio Code" by Paul Hocker
+6. Install the **Kick Assembler IDE Extension for VS Code** Named "Kick Assembler (C64) for Visual Studio Code" by Paul Hocker
   - Start up VS Code
   - Search for Extension (ctrl-shift-x) 
   - type in Kick Assembler (C64)
@@ -34,7 +29,28 @@ To setup a development environment to build and run these sampes follow the foll
     - Emulator runtime, which is the VICE C64 emulator (x64sc.exe)
     - C64 debugger runtime (C64Debugger.exe)
     - Java runtime (java.exe) 
-    
-- Now you should be ready to try the samples in this repository.
 
-- Clone the repository, VS Code, open one of the directories like hello, open the assembly file like hello.asm in the editor.  Then go to the command palette with ctrl-shift-p and select or type in "Kick Assembler: Build and Run" if configured correctly the program will run in VICE.
+Now you should be ready to try the build astroblast.
+
+---------------------------------------------------------------------------------------------------------------------
+
+Additional tools used during development of astroblast that are useful, if not required, when the desire is to do something more than just build the code.   
+
+
+1. Install **C64 debugger**. This is also not technically required to simply build the software, but useful if you want to debug anything.
+  - Download lastest from here: https://sourceforge.net/projects/c64-debugger/
+  - Version for development: v0.64.58.4
+
+
+2. Install **GoatTracker** if you are interested in looking at or editing the music or sound effects, if not then this isn't required.
+  - Download from here: https://sourceforge.net/projects/goattracker2/
+  - Version for development: v2.76 (not the stereo version)
+
+3. **Install CBM Prg Studio**.  This was only used to edit and save the character set used in the game.  There are probably lots of other C64 charset editors that could do this job as well.
+  - Download latest from here: https://www.ajordison.co.uk/download.html
+  - Version used for development: v3.14.1 
+  
+4. **Spritemate** website was used to create the sprites for the game.
+  - Nothing to download or install
+  - Just use the website here: https://www.spritemate.com/
+
