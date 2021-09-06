@@ -1,4 +1,9 @@
-// astro_wind_data
+//////////////////////////////////////////////////////////////////////////////
+// astro_wind_glimmer_data.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
+
 #importonce
 #import "../nv_c64_util/nv_color_macs.asm"
 #import "../nv_c64_util/nv_screen_macs.asm"

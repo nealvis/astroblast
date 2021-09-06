@@ -1,4 +1,9 @@
-// astro_wind_data
+//////////////////////////////////////////////////////////////////////////////
+// astro_wind_data.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+
+
 #importonce
 
 //////////////////

@@ -1,6 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////
-// astro_turret_6_data.asm
-// file contains the data for turret 3 frames as they are stepped through.
+// astro_starfield_data.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
+// data for the starfield effect
 
 #importonce
 

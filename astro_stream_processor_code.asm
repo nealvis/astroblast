@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// astro_stream_processor_code.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
+// subroutine based on expansion of the nv_stream_proc_sr macro
+// to process streams for astroblast.
+
 #importonce
 
 #import "../nv_c64_util/nv_c64_util_macs_and_data.asm"

@@ -1,6 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////
 // astro_turret_5_data.asm
-// file contains the data for turret 2 frames as they are stepped through.
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
+// file contains the data for turret 5 frames as they are stepped through.
 
 #importonce
 

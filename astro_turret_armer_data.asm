@@ -1,20 +1,18 @@
 //////////////////////////////////////////////////////////////////////////////
 // astro_turret_armer_data.asm
-// file contains the data for turret 3 frames as they are stepped through.
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
+// file contains the data for turret armer
 
 #importonce
 
 #import "../nv_c64_util/nv_color_macs.asm"
-//#import "../nv_c64_util/nv_screen_rect_macs.asm"
 #import "../nv_c64_util/nv_screen_macs.asm"
 #import "astro_vars_data.asm"
 
 /////////////////
 // starfield consts and variables
-
-//.const STAR_COLOR = NV_COLOR_LITE_GREY
-//.const STAR_CHAR_SMALL = $2E 
-//.const STAR_CHAR_MED = $51
 
 // number of steps which in this case won't be the same as number of frames
 // frames for turret effect.  Each step is a different color level for the turret.
@@ -27,17 +25,13 @@
 .const TURRET_ARM_MED = 2
 .const TURRET_ARM_HARD = 3
 
-
 // number of seconds it should take to arm the turret completely.  three
 // different possibilities for easy, medium, and hard difficulty
 .const TURRET_SECONDS_TO_ARM_EASY = 4
 .const TURRET_SECONDS_TO_ARM_MED = 2
 .const TURRET_SECONDS_TO_ARM_HARD = 1.5
 
-
 // number of frames it takes before a step should be made
-//.const TURRET_FRAMES_BETWEEN_STEPS = ((TURRET_SECONDS_TO_ARM * ASTRO_FPS) / TURRET_ARM_FRAMES)
-
 .const TURRET_FRAMES_BETWEEN_STEPS_EASY = ((TURRET_SECONDS_TO_ARM_EASY * ASTRO_FPS) / TURRET_ARM_FRAMES)
 .const TURRET_FRAMES_BETWEEN_STEPS_MED = ((TURRET_SECONDS_TO_ARM_MED * ASTRO_FPS) / TURRET_ARM_FRAMES)
 .const TURRET_FRAMES_BETWEEN_STEPS_HARD = ((TURRET_SECONDS_TO_ARM_HARD * ASTRO_FPS) / TURRET_ARM_FRAMES)
@@ -72,15 +66,6 @@ turret_arm_stream_empty_frame:
 .const TURRET_ARM_CHAR_BOTTOM = $4A
 
 turret_arm_stream_frame_1:
-/*
-    .word $FFFF
-    .byte $01, TURRET_ARM_CHAR_TOP
-    .word nv_screen_char_addr_from_yx(TURRET_ARM_ROW, TURRET_ARM_COL)
-
-    .word $FFFF
-    .byte $01, TURRET_ARM_CHAR_BOTTOM
-    .word nv_screen_char_addr_from_yx(TURRET_ARM_ROW+1, TURRET_ARM_COL)
-*/
     .word $FFFF
     .byte $01, NV_COLOR_RED
     .word nv_screen_color_addr_from_yx(TURRET_ARM_ROW, TURRET_ARM_COL)

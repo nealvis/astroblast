@@ -1,30 +1,24 @@
 //////////////////////////////////////////////////////////////////////////////
 // astro_title_code.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
 //////////////////////////////////////////////////////////////////////////////
 // The following subroutines should be called from the main engine
 // as follows
-// TitleStart: call to show title screen
+// TitleStart: call to show title screen.  it will not return until the 
+//             title screen is done.
 //////////////////////////////////////////////////////////////////////////////
 
 #importonce 
 #import "../nv_c64_util/nv_c64_util_macs_and_data.asm"
 #import "astro_vars_data.asm"
-
-/*
-#import "../nv_c64_util/nv_screen_macs.asm"
-#import "../nv_c64_util/nv_screen_rect_macs.asm"
-#import "../nv_c64_util/nv_pointer_macs.asm"
-#import "../nv_c64_util/nv_debug_macs.asm"
-#import "../nv_c64_util/nv_math16_macs.asm"
-*/
 #import "astro_starfield_code.asm"
 #import "astro_keyboard_macs.asm"
 #import "astro_sound.asm"
 #import "astro_stream_processor_code.asm"
 #import "astro_ships_code.asm"
-//#import "../nv_c64_util/nv_joystick_code.asm"
 
-//#import "../nv_c64_util/nv_debug_code.asm"
+
 astro_title_str:     .text @"     astroblast \$00"
 
 title_quit_str:        .text @" q key .. quit\$00"
@@ -106,12 +100,7 @@ title_rect_stream:
     // poke the colors of the rect
     .word $FFFF
     .byte $01, NV_COLOR_WHITE
-
-    //.word $FFFF
-    //.byte $04                               // destination block command
-    //.word TITLE_RECT_COLOR_FIRST
-    //.word TITLE_RECT_COLOR_FIRST + TITLE_RECT_WIDTH
-    
+  
     .word $FFFF
     .byte $04                               // destination block command
     .word TITLE_RECT_COLOR_FIRST+(NV_SCREEN_CHARS_PER_ROW * 0)

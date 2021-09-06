@@ -1,13 +1,15 @@
 //////////////////////////////////////////////////////////////////////////////
 // astro_turret_1_data.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
 // file contains the data for turret 1 frames as they are stepped through.
+// turret 1 is the on that shoots straight up
 
 #importonce
 
 #import "../nv_c64_util/nv_color_macs.asm"
 #import "../nv_c64_util/nv_screen_rect_macs.asm"
-
-
 
 //////////////////
 // turret 1 consts and variables

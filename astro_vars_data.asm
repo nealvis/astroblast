@@ -1,6 +1,10 @@
-
 //////////////////////////////////////////////////////////////////////////////
 // astro_vars_data.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
+//////////////////////////////////////////////////////////////////////////////
+// Variables and data that are needed throughout the astroblast program
+
 #import "../nv_c64_util/nv_color_macs.asm"
 
 #importonce

@@ -1,5 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////
+// astro_stream_processor_macs.asm
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
 //////////////////////////////////////////////////////////////////////////////
+// Contains macros that can be expanded as a step subroutine that has 
+// a different stream to process at each step.
+
 #importonce
 
 #import "../nv_c64_util/nv_c64_util_macs.asm"
