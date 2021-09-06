@@ -68,4 +68,5 @@ The sprites for the game were create via the Spritemate web application here: ht
  ### Custom Charset
  Astroblast uses a custom character set which was created using the charset editor in cbm prg studio.  The project file for cbm prog studio is in the astro_charset_proj subdirectory.  To see the custom charset, open the astro_charset_proj.cbmprj file in that directory from CBM prg Studio.  Then double click on the astro_chars.cst to open the charset editor.
 ![charset](images/cbm_charset.jpg)
+To save the custom charset, in the character editor, export the charset to file.  Include all characters in the charset and name the file **astro_charset.bin**. This file should be in the main astroblast directory.
  
