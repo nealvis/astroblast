@@ -48,7 +48,7 @@ Additional tools used during development of astroblast that are useful, if not r
 
 3. **Install CBM Prg Studio**.  This was only used to edit and save the character set used in the game.  There are probably lots of other C64 charset editors that could do this job as well.
   - Download latest from here: https://www.ajordison.co.uk/download.html
-  - Version used for development: v3.14.1 
+  - Version used for development: v3.14.1 beta 1
   
 4. **Spritemate** website was used to create the sprites for the game.
   - Nothing to download or install
