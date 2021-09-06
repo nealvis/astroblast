@@ -49,7 +49,7 @@
     <!--End of screen designer settings-->
     <SourceFiles>
         <SourceFile>
-            <Name>latest_astro_chars.cst</Name>
+            <Name>astro_chars.cst</Name>
             <PrgName />
             <FileType>6</FileType>
             <IncludeInBuild>True</IncludeInBuild>
