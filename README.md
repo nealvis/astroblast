@@ -63,6 +63,9 @@ To open, edit and save a sound effect for this game you can follow the steps bel
 5. **Convert the .ins file to .bin** by using the following utility that comes with GoatTracker **`ins2snd2.exe file.ins file.bin -b`** This will create the .bin file from the .ins file.
 
  ### Sprites
- The sprites for the game were create via the Spritemate web application here: https://www.spritemate.com/.  To edit the sprites, load the file `**astro_sprites.spm**` from within the web application
+The sprites for the game were create via the Spritemate web application here: https://www.spritemate.com/.  To edit the sprites, load the file **`astro_sprites.spm`** from within the web application
  
+ ## Custom Charset
+ Astroblast uses a custom character set which was created using the charset editor in cbm prg studio.  The project file for cbm prog studio is in the astro_charset_proj subdirectory.  To see the custom charset, open the astro_charset_proj.cbmprj file in that directory from CBM prg Studio.  Then double click on the astro_chars.cst to open the charset editor.
+![charset](images/cbm_charset.jpg)
  
