@@ -1,5 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // astro_ship_death_data.asm 
+// Copyright(c) 2021 Neal Smith.
+// License: MIT. See LICENSE file in root directory.
 //////////////////////////////////////////////////////////////////////////////
 // contains the data that is needed by astro_ship_death_code.asm
 // This includes some variables that can be tested by the main engine
