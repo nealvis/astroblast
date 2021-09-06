@@ -24,6 +24,7 @@ To setup a development environment to build and run astroblast follow the follow
   - Search for Extension (ctrl-shift-x) 
   - type in Kick Assembler (C64)
   - Install
+  - Version used for development: 0.7.15
   - configure the extension in VS Code, specifically find and set the settings that point the extension where it can find
     - Kick assembler jar file (KickAss.jar)
     - Emulator runtime, which is the VICE C64 emulator (x64sc.exe)
