@@ -15,6 +15,13 @@ To build the code in this repo you need you will need a development environment 
 4. **Clone the astroblast** repository repo while still in BASEDIR with this command `https://github.com/nealvis/astroblast.git`
 5. **Build astroblast from VS Code** by opening the astroblast directory in VS Code and then open the file astroblast.asm.  With the kick assemebler IDE Extension installed per the [env_setup.md](./env_setup.md) in the root directory of this repository you press F6 and the Extension will call kickassembler appropriately for all the files needed and produce astroblast.prg which is a C64 program file that can be loaded an run on a real Commodore 64 or in the VICE C64 emulator.
 
+## Running Astroblast
+If running in the VICE emulator be sure that the emulator is set to NTSC.  You can do this by selecting **Settings** from the menu, then **Machine** and **Model**.  In this window you can select the settings shown in this screen shot:
+![VICE machine model settings](images/vice_machine_settings.jpg)
+
+The product of the build is the single file **astroblast.prg**.  This program file will exist in the astroblast directory and it can be executed from the VICE emulator by passing it as the single argument on the commandline like this: `x64sc.exe astroblast.prg`
+Alternatively if you would like to run it on a real C64 you can copy the file to a floppy disk and load it as normal with `load "astroblast.prg",8` followed by `Run` to execute after its loaded.
+
 ## Game Play
 This is a two player game.  There is no one player mode.  The object of the game is to collect more asteroids than the other player before the time runs out or the target number of asteroids has been collected.  Both options of playing for a duration vs number of asteroids and the game ending number of seconds or asteroids collected can be set in the opening title screen
 ![Astroblast Title Screen](images/astroblast_title.jpg)
