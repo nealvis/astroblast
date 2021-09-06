@@ -7,7 +7,13 @@ This program is a mini C64 game that uses the nv_c64_util code for various funct
 ![astroblast](images/astroblast_421.gif)
 
 ## Building
-To build the program open the astroblast directory in VS Code and then open the file astroblast.asm.  With the kick assemebler IDE Extension installed per the [main repository README.md](../README.md) in the root directory of this repository you press F6 and the Extension will call kickassembler appropriately for all the files needed and produce astroblast.prg which is a C64 program file that can be loaded an run on a real Commodore 64 or in the VICE C64 emulator.
+To build the code in this repo you need you will need a development environment that includes the tools in the [env_setup.md](./env_setup.md) of this repo. You will also need to have the code from the nv_c64_util repository available and in a directory that is at the same level as the astroblast directory.  To prepare your build environment in this way you can follow these instructions.
+1. **Setup build tools/environment** per the instructions here: [env_setup.md](./env_setup.md)
+2. **Create empty directory** on your development machine, we'll call it BASEDIR
+3. **Change dir to BASEDIR** in a git capable shell on your 
+3. **Clone the nv_c64_utils** dependecy repo into BASEDIR with this command `https://github.com/nealvis/nv_c64_util.git`
+4. **Clone the astroblast** repository repo while still in BASEDIR with this command `https://github.com/nealvis/astroblast.git`
+5. **Build astroblast from VS Code** by opening the astroblast directory in VS Code and then open the file astroblast.asm.  With the kick assemebler IDE Extension installed per the [env_setup.md](./env_setup.md) in the root directory of this repository you press F6 and the Extension will call kickassembler appropriately for all the files needed and produce astroblast.prg which is a C64 program file that can be loaded an run on a real Commodore 64 or in the VICE C64 emulator.
 
 ## Game Play
 This is a two player game.  There is no one player mode.  The object of the game is to collect more asteroids than the other player before the time runs out or the target number of asteroids has been collected.  Both options of playing for a duration vs number of asteroids and the game ending number of seconds or asteroids collected can be set in the opening title screen
