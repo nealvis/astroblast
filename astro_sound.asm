@@ -16,7 +16,7 @@
 *=$8000 "astro sound"
 
 SoundLoadAddr:
-.import binary "astro_sound.bin"
+.import binary "sounds/astro_sound.bin"
 
 ///////////////////////
 // sound effects
@@ -24,22 +24,22 @@ SoundLoadAddr:
 // lower addresses effects don't interupt higher address effects
 SoundFxShip1HitAsteroidPrivate:
 SoundFxShip2HitAsteroidPrivate:
-.import binary "ship_hit_asteroid_sound_fx.bin"
+.import binary "sounds/ship_hit_asteroid_sound_fx.bin"
 
 //SoundFxShip2HitAsteroid:
 //.import binary "ship_hit_asteroid_sound_fx.bin"
 
 SoundFxTurretFirePrivate:
-.import binary "turret_fire_sound_fx.bin"
+.import binary "sounds/turret_fire_sound_fx.bin"
 
  SoundFxShipHitByTurretPrivate:
-.import binary "ship_hit_by_turret_sound_fx.bin"
+.import binary "sounds/ship_hit_by_turret_sound_fx.bin"
 
 SoundFxHolePrivate:
-.import binary "hole_sound_fx.bin"
+.import binary "sounds/hole_sound_fx.bin"
 
 SoundFxSilencePrivate:
-.import binary "silent_sound_fx.bin"
+.import binary "sounds/silent_sound_fx.bin"
 
 sound_master_volume: .byte 7
 sound_mute: .byte 0
