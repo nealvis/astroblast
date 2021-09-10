@@ -1,10 +1,13 @@
 # astroblast 
-This is a mini game created to explore possibilities of game programming on the Commodore 64.  Game specific code is in the astroblast directory but code of a utility nature that could be used in other games was separated and put in the nv_c64_util directory where you will find lots of code and macros as well as test programs for them.  This game was intended to be run on an NTSC C64.  If running within an emulator such ase VICE you will want to configure it as such.  It seems to run fine in PAL mode but as you would expect everything runs a little slower.
+This is a mini game created to explore possibilities of game programming on the Commodore 64.  This game is written entirely in 6502 assembly language.  Game specific code is in the root astroblast directory but code of a utility nature that could be used in other games was separated and put in the [nv_c64_util](https://github.com/nealvis/nv_c64_util) directory where you will find lots of code and macros that are not specific to this program.  Also, in the [nv_c64_util_test](https://github.com/nealvis/nv_c64_util_test) repository you will find test programs for this utility code. This game was intended to be run on an NTSC version of C64.  If running within an emulator such ase VICE you will want to configure it as such.  It seems to run fine in PAL mode but as you would expect everything runs a little slower.
 
 ## Overview
 All the assembler code in this directory is written for Kick Assembler and in general the setup outlined in the [main repository README.md](../README.md).
 This program is a mini C64 game that uses the nv_c64_util code for various functionality.  When the game is running it looks something like this.<br>
 ![astroblast](images/astroblast_421.gif)
+
+## Software Dependencies
+There are no dependencies on libraries or game frameworks other than the [nv_c64_util](https://github.com/nealvis/nv_c64_util) companion repository.
 
 ## Building
 To build the code in this repo you need you will need a development environment that includes the tools in the [env_setup.md](./env_setup.md) of this repo. You will also need to have the code from the nv_c64_util repository available and in a directory that is at the same level as the astroblast directory.  To prepare your build environment in this way you can follow these instructions.
@@ -45,6 +48,8 @@ The sound effects for the game are individual instruments created in GoatTracker
  - ship_hit_asteroid_sound_fx.ins: The sound played when a ship hits an asteroid
  - silent_sound_fx.ins: a very short sound that is silence.  This is only use as a way to interupt other effects that are playing.
  - turret_fire_sound_fx.ins: is the sound that is played when the turret fires.
+
+All the music and the sound effects files are in the **astroblast/sounds** subdirectory.  The code that controls the music and sound is in the **astro_sound*.asm** source files.
 
 #### Game Music: astro_sound.sng / astro_sound.bin
 The .sng file cannot be used directly within the game.  This file must be converted to a binary file first and then the source code can import it directly at the right location.  To convert the **astro_sound.sng** file to **astro_sound.bin** follow the following steps:
