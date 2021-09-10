@@ -739,6 +739,7 @@ WinnerTie:
 WinnerWaitForKey:
     // fall through to wait for key
     nv_screen_poke_color_str(WINNER_CONTINUE_ROW, WINNER_CONTINUE_COL, NV_COLOR_WHITE, winner_continue_str)
+    nv_screen_poke_color_str(WINNER_CONTINUE_ROW+1, WINNER_CONTINUE_COL, NV_COLOR_WHITE, winner_quit_str)
     nv_key_wait_no_key()
 
     // initialize song 0 so we can hear music during title 
@@ -748,20 +749,26 @@ WinnerWaitForKey:
     jsr SoundMuteOff
 
 WinnerWaitForKeyLoop:
-    //nv_screen_poke_hex_byte_mem(0, 20, winner_key_count, true)
     nv_sprite_wait_last_scanline()
     SoundDoStep()
     nv_key_scan()
     nv_key_get_last_pressed_a()     // get key pressed in accum
 
+WinnerTryContinueKey:
     cmp #KEY_WINNER_CONTINUE
-    bne WrongKey
-RightKey:
-    //nv_screen_poke_hex_byte_a(0, 34, true)
-    //dec winner_key_count
+    bne WinnerTryQuitKey
+WinnerGotContinueKey:
     beq WinnerGotKey
 
-WrongKey:
+WinnerTryQuitKey:
+    cmp #KEY_QUIT
+    bne WinnerKeyCheckEnd
+WinnerGotQuitKey:
+    lda #1
+    sta quit_flag
+    jmp WinnerGotKey
+
+WinnerKeyCheckEnd:
     jmp WinnerWaitForKeyLoop
 
 WinnerGotKey:
@@ -780,6 +787,7 @@ WinnerGotKey:
     winner_str: .text @"the winner!\$00"
     winner_tie_str: .text @"tie game!\$00"
     winner_continue_str: .text @"press p to play more\$00"
+    winner_quit_str: .text @"press q to quit now\$00"
 }
 // DoWinner End
 //////////////////////////////////////////////////////////////////////////////
