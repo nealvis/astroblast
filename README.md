@@ -61,7 +61,7 @@ The sound effects for the game are individual instruments created in GoatTracker
  - silent_sound_fx.ins: a very short sound that is silence.  This is only use as a way to interupt other effects that are playing.
  - turret_fire_sound_fx.ins: is the sound that is played when the turret fires.
 
-All the music and the sound effects files are in the **astroblast/sounds** subdirectory.  The code that controls the music and sound is in the **astro_sound*.asm** source files.
+All the music and the sound effects files are in the **astroblast/sounds** subdirectory.  The code that controls the music and sound is in the **astro_sound.asm** and **astro_sound_macs.asm** source files.
 
 #### Game Music: astro_sound.sng / astro_sound.bin
 The .sng file cannot be used directly within the game.  This file must be converted to a binary file first and then the source code can import it directly at the right location.  To convert the **astro_sound.sng** file to **astro_sound.bin** follow the following steps:
