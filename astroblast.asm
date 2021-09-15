@@ -31,6 +31,7 @@
 #import "astro_vars_data.asm"
 #import "astro_wind_data.asm"
 #import "astro_ship_death_data.asm"
+#import "astro_ship_shield_data.asm"
 #import "astro_blackhole_data.asm"
 
 .const KEY_COOL_DURATION = $08
@@ -59,6 +60,7 @@ nv_b8_label: .text @"nv b8 coll sprite: \$00"
 #import "../nv_c64_util/nv_sprite_extra_code.asm"
 #import "astro_ships_code.asm"
 #import "astro_ship_death_code.asm"
+#import "astro_ship_shield_code.asm"
 #import "astro_starfield_code.asm"
 #import "astro_turret_armer_code.asm"
 #import "../nv_c64_util/nv_joystick_code.asm"
@@ -185,6 +187,7 @@ RegularFrame:
     jsr TurretStep
     jsr TurretArmStep
     jsr ShipDeathStep
+    jsr ShipShieldStep
 
     // fire the turret automatically if its time.
     jsr TurretAutoStart
@@ -272,6 +275,7 @@ ProgramDone:
     jsr WindCleanup
     jsr HoleCleanup
     jsr ShipDeathCleanup
+    jsr ShipShieldCleanup
     jsr JoyCleanup
 
     jsr SoundMuteOn
@@ -579,6 +583,7 @@ DoPostTitleInit:
 
     jsr TurretArmStart
     jsr ShipDeathInit
+    jsr ShipShieldInit
     jsr HoleInit
 
 

@@ -284,3 +284,59 @@ sprite_hole_4:
 .byte $b7,$b0,$bf,$ee,$f8,$2f,$ba,$fc
 .byte $0b,$fe,$ee,$0f,$82,$ce,$0e,$83
 .byte $cb,$2c,$03,$80,$2c,$03,$00,$8c
+
+
+// sprite 20 / multicolor / color: $04
+sprite_sheild_00:
+.byte $00,$00,$00,$00,$00,$00,$00,$00
+.byte $00,$40,$00,$0c,$13,$c0,$0c,$5e
+.byte $b0,$03,$5e,$ac,$03,$12,$ab,$03
+.byte $43,$aa,$c0,$03,$aa,$b3,$00,$aa
+.byte $ac,$03,$aa,$b3,$43,$aa,$c0,$12
+.byte $ab,$03,$5e,$ac,$03,$5e,$b0,$03
+.byte $13,$c0,$0c,$40,$00,$0c,$00,$00
+.byte $00,$00,$00,$00,$00,$00,$00,$84
+
+// sprite 21 / multicolor / color: $04
+sprite_sheild_01:
+.byte $00,$00,$00,$00,$00,$c0,$00,$00
+.byte $30,$40,$00,$0c,$13,$c0,$0c,$5e
+.byte $b0,$03,$5e,$ac,$03,$12,$ab,$03
+.byte $43,$aa,$c0,$03,$aa,$b3,$00,$aa
+.byte $ac,$03,$aa,$b3,$43,$aa,$c0,$12
+.byte $ab,$03,$5e,$ac,$03,$5e,$b0,$03
+.byte $13,$c0,$0c,$40,$00,$0c,$00,$00
+.byte $30,$00,$00,$c0,$00,$00,$00,$84
+
+// sprite 22 / multicolor / color: $04
+sprite_shield_02:
+.byte $00,$3f,$00,$00,$00,$c0,$00,$00
+.byte $30,$40,$00,$0c,$13,$c0,$0c,$5e
+.byte $b0,$03,$5e,$ac,$03,$12,$ab,$03
+.byte $43,$aa,$c0,$03,$aa,$b3,$00,$aa
+.byte $ac,$03,$aa,$b3,$43,$aa,$c0,$12
+.byte $ab,$03,$5e,$ac,$03,$5e,$b0,$03
+.byte $13,$c0,$0c,$40,$00,$0c,$00,$00
+.byte $30,$00,$00,$c0,$00,$3f,$00,$84
+
+// sprite 23 / multicolor / color: $04
+sprite_shield_03:
+.byte $00,$ff,$00,$03,$00,$c0,$00,$00
+.byte $30,$40,$00,$0c,$13,$c0,$0c,$5e
+.byte $b0,$03,$5e,$ac,$03,$12,$ab,$03
+.byte $43,$aa,$c0,$03,$aa,$b3,$00,$aa
+.byte $ac,$03,$aa,$b3,$43,$aa,$c0,$12
+.byte $ab,$03,$5e,$ac,$03,$5e,$b0,$03
+.byte $13,$c0,$0c,$40,$00,$0c,$00,$00
+.byte $30,$03,$00,$c0,$00,$ff,$00,$84
+
+// sprite 24 / multicolor / color: $04
+sprite_shield_04:
+.byte $00,$ff,$00,$03,$00,$c0,$0c,$00
+.byte $30,$30,$00,$0c,$33,$c0,$0c,$de
+.byte $b0,$03,$de,$ac,$03,$d2,$ab,$03
+.byte $03,$aa,$c0,$c3,$aa,$b3,$00,$aa
+.byte $ac,$c3,$aa,$b3,$03,$aa,$c0,$d2
+.byte $ab,$03,$de,$ac,$03,$de,$b0,$03
+.byte $33,$c0,$0c,$30,$00,$0c,$0c,$00
+.byte $30,$03,$00,$c0,$00,$ff,$00,$84
