@@ -34,6 +34,7 @@
         .label y_loc = info.base_addr + NV_SPRITE_Y_OFFSET
         .label x_vel = info.base_addr + NV_SPRITE_VEL_X_OFFSET
         .label y_vel = info.base_addr + NV_SPRITE_VEL_Y_OFFSET
+        .label data_ptr = info.base_addr + NV_SPRITE_DATA_PTR_OFFSET
         .label base_addr = info.base_addr
 
 // the extra data that goes with the sprite
@@ -85,6 +86,20 @@ Disable:
         ldx #<info.base_addr
         nv_sprite_extra_disable_sr()
 
+// Accum must have MSB of new data_ptr
+// X Reg must have LSB of new data_ptr
+SetDataPtr:
+{
+    stx data_ptr
+    sta data_ptr+1
+
+    //   Accum: MSB of address of nv_sprite_extra_data
+    //   X Reg: LSB of address of the nv_sprite_extra_data
+    lda #>info.base_addr
+    ldx #<info.base_addr
+    jsr NvSpriteSetDataPtrFromExtra
+    rts
+}
 
 LoadEnabledToA:
         lda info.base_addr + NV_SPRITE_ENABLED_OFFSET
@@ -175,6 +190,7 @@ rect2: .word $0000, $0000  // (left, top)
     .label y_loc = info.base_addr + NV_SPRITE_Y_OFFSET
     .label x_vel = info.base_addr + NV_SPRITE_VEL_X_OFFSET
     .label y_vel = info.base_addr + NV_SPRITE_VEL_Y_OFFSET
+    .label data_ptr = info.base_addr + NV_SPRITE_DATA_PTR_OFFSET
     .label base_addr = info.base_addr
 
 
@@ -229,6 +245,21 @@ Disable:
         lda #>info.base_addr
         ldx #<info.base_addr
         nv_sprite_extra_disable_sr()
+
+// Accum must have MSB of new data_ptr
+// X Reg must have LSB of new data_ptr
+SetDataPtr:
+{
+    stx data_ptr
+    sta data_ptr+1
+
+    //   Accum: MSB of address of nv_sprite_extra_data
+    //   X Reg: LSB of address of the nv_sprite_extra_data
+    lda #>info.base_addr
+    ldx #<info.base_addr
+    jsr NvSpriteSetDataPtrFromExtra
+    rts
+}
 
 LoadEnabledToA:
         lda info.base_addr + NV_SPRITE_ENABLED_OFFSET

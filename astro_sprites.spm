@@ -1,4 +1,4 @@
-{"colors":{"0":0,"2":13,"3":15},"current_sprite":21,"pen":3,"sprites":[{"color":4,"double_x":false,"double_y":false,"multicolor":true,"name":"sprite_0","overlay":false,"pixels":[
+{"colors":{"0":0,"2":13,"3":15},"current_sprite":22,"pen":3,"sprites":[{"color":4,"double_x":false,"double_y":false,"multicolor":true,"name":"sprite_0","overlay":false,"pixels":[
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -438,7 +438,7 @@
 [0,0,0,0,3,0,1,0,1,0,0,0,0,0,3,0,3,0,0,0,1,0,3,0],
 [0,0,1,0,3,0,0,0,0,0,0,0,0,0,3,0,1,0,0,0,0,0,0,0],
 [0,0,1,0,3,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0]
-]},{"color":4,"double_x":false,"double_y":false,"multicolor":true,"name":"sprite_sheild_00","overlay":false,"pixels":[
+]},{"color":4,"double_x":false,"double_y":false,"multicolor":true,"name":"sprite_shield_00","overlay":false,"pixels":[
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -460,7 +460,7 @@
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-]},{"color":4,"double_x":false,"double_y":false,"multicolor":true,"name":"sprite_sheild_01","overlay":false,"pixels":[
+]},{"color":4,"double_x":false,"double_y":false,"multicolor":true,"name":"sprite_shield_01","overlay":false,"pixels":[
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0],
 [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0],

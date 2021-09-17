@@ -287,7 +287,7 @@ sprite_hole_4:
 
 
 // sprite 20 / multicolor / color: $04
-sprite_sheild_00:
+sprite_shield_00:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$40,$00,$0c,$13,$c0,$0c,$5e
 .byte $b0,$03,$5e,$ac,$03,$12,$ab,$03
@@ -298,7 +298,7 @@ sprite_sheild_00:
 .byte $00,$00,$00,$00,$00,$00,$00,$84
 
 // sprite 21 / multicolor / color: $04
-sprite_sheild_01:
+sprite_shield_01:
 .byte $00,$00,$00,$00,$00,$c0,$00,$00
 .byte $30,$40,$00,$0c,$13,$c0,$0c,$5e
 .byte $b0,$03,$5e,$ac,$03,$12,$ab,$03

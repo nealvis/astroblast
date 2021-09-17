@@ -37,7 +37,7 @@
 .const KEY_COOL_DURATION = $08
 .const ASTRO_GAME_SECONDS_ROW = 0
 .const ASTRO_GAME_SECONDS_COL = 17
-.const DEBUG_KEYS_ON = false 
+.const DEBUG_KEYS_ON = true 
 .const HOLE_SOUND_FRAMES = 31
 
 ship1_collision_sprite_label: .text @"ship1 coll sprite: \$00"
@@ -369,6 +369,9 @@ HandleCollisionShip1:
     rts
 
 CollisionNotHole:
+    lda #$01
+    jsr ShipShieldIsActive
+    bne NoCollisionShip1
     jsr AstroSpriteExtraPtrToRegs 
     jsr NvSpriteExtraDisable
     jsr SoundPlayShip1AsteroidFX
@@ -415,6 +418,10 @@ HandleCollisionShip2:
     rts
 
 CollisionNotHole:
+    lda #$02
+    jsr ShipShieldIsActive
+    bne NoCollisionShip2
+
     jsr AstroSpriteExtraPtrToRegs 
     jsr NvSpriteExtraDisable
     jsr SoundPlayShip2AsteroidFX
@@ -695,6 +702,9 @@ DoWinner:
     // show the score
     jsr ScoreToScreen
 
+    // force sheilds off for both ships
+    lda #$03
+    jsr ShipShieldForceStop
 
     // check for a tie
     nv_beq16(ship_1.score, ship_2.score, WinnerTie)
@@ -930,6 +940,16 @@ DoneCheckingDisabledAsteroids:
     rts
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//
+DoShield:
+{
+    lda #1
+    jsr ShipShieldStart
+    rts
+}
+//
+//////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
 // subroutine to Pause
@@ -1093,7 +1113,8 @@ TryExperimental05:
     cmp #KEY_EXPERIMENTAL_05             
     bne TryExperimental06                           
 WasExperimental05:
-    jsr SlowMoStart
+    //jsr SlowMoStart
+    jsr DoShield
     jmp DoneKeys
 
 TryExperimental06:
@@ -1179,13 +1200,19 @@ Joy1IsLeft:
 Joy1TryRight:
     ldx #JOY_PORT_1_ID
     jsr JoyIsRight
-    beq Joy1Done
+    beq Joy1TryDown
 Joy1IsRight:
     ldx wind_count
     bne Joy1CantIncBecuaseWind
     jsr ship_1.IncVelX          // inc the ship X velocity
 Joy1CantIncBecuaseWind:   
 
+Joy1TryDown:
+    ldx #JOY_PORT_1_ID
+    jsr JoyIsDown
+    beq Joy1Done
+    lda #$01
+    jsr ShipShieldStart
 Joy1Done:
 
 Joy2TryLeft:
@@ -1199,12 +1226,19 @@ Joy2IsLeft:
 Joy2TryRight:
     ldx #JOY_PORT_2_ID
     jsr JoyIsRight
-    beq Joy2Done
+    beq Joy2TryDown
 Joy2IsRight:
     ldx wind_count
     bne Joy2CantIncBecuaseWind
     jsr ship_2.IncVelX          // inc the ship X velocity
 Joy2CantIncBecuaseWind:   
+
+Joy2TryDown:
+    ldx #JOY_PORT_2_ID
+    jsr JoyIsDown
+    beq Joy2Done
+    lda #$02
+    jsr ShipShieldStart
 
 Joy2Done:
 
@@ -1410,11 +1444,8 @@ Turret1ActiveTimeToCheckRect:
     beq Turret2HitCheck
 
 Turret1DidHit:
-    lda #1
-    jsr ShipDeathStart
     lda #TURRET_1_ID
-    jsr TurretForceStop
-    jsr SoundPlayShipHitByTurretFX
+    jsr DoTurretHitShip1
 
 Turret2HitCheck:
     lda #TURRET_2_ID
@@ -1432,11 +1463,8 @@ Turret2ActiveTimeToCheckRect:
     beq Turret3HitCheck
 
 Turret2DidHit:
-    lda #1
-    jsr ShipDeathStart
     lda #TURRET_2_ID
-    jsr TurretForceStop
-    jsr SoundPlayShipHitByTurretFX
+    jsr DoTurretHitShip1
 
 Turret3HitCheck:
     lda #TURRET_3_ID
@@ -1453,11 +1481,8 @@ Turret3ActiveTimeToCheckRect:
     beq Turret4HitCheck
 
 Turret3DidHit:
-    lda #1
-    jsr ShipDeathStart
     lda #TURRET_3_ID
-    jsr TurretForceStop
-    jsr SoundPlayShipHitByTurretFX
+    jsr DoTurretHitShip1
 
 
 Turret4HitCheck:
@@ -1476,11 +1501,8 @@ Turret4ActiveTimeToCheckRect:
     beq Turret5HitCheck
 
 Turret4DidHit:
-    lda #2
-    jsr ShipDeathStart
     lda #TURRET_4_ID
-    jsr TurretForceStop
-    jsr SoundPlayShipHitByTurretFX
+    jsr DoTurretHitShip2
 
 Turret5HitCheck:
     lda #TURRET_5_ID
@@ -1498,12 +1520,8 @@ Turret5ActiveTimeToCheckRect:
     beq Turret6HitCheck
 
 Turret5DidHit:
-    lda #2
-    jsr ShipDeathStart
     lda #TURRET_5_ID
-    jsr TurretForceStop
-    jsr SoundPlayShipHitByTurretFX
-
+    jsr DoTurretHitShip2
 
 Turret6HitCheck:
     lda #TURRET_6_ID
@@ -1520,16 +1538,61 @@ Turret6ActiveTimeToCheckRect:
     beq TurretHitCheckDone
 
 Turret6DidHit:
-    lda #2
-    jsr ShipDeathStart
     lda #TURRET_6_ID
-    jsr TurretForceStop
-    jsr SoundPlayShipHitByTurretFX
+    jsr DoTurretHitShip2
 
 TurretHitCheckDone:
     rts
 }
 // TurretHitCheck End
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// 
+// Accum is turret number that hit ship
+DoTurretHitShip1:
+{
+    // accum has turret number in it already
+    jsr TurretForceStop
+
+    lda #$01
+    jsr ShipShieldIsActive
+    bne NoDeathToday
+
+    lda #$01                            // ship number
+    jsr ShipDeathStart
+    
+    // play death sound
+    jsr SoundPlayShipHitByTurretFX
+
+NoDeathToday:
+    rts
+}
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// 
+// Accum is turret number that hit ship
+DoTurretHitShip2:
+{
+    // accum has turret number in it already
+    jsr TurretForceStop
+
+    lda #2
+    jsr ShipShieldIsActive
+    bne NoDeathToday
+
+    lda #$02                            // ship number
+    jsr ShipDeathStart
+    
+    // play death sound
+    jsr SoundPlayShipHitByTurretFX
+
+NoDeathToday:
+    rts
+}
+//
 //////////////////////////////////////////////////////////////////////////////
 
 
