@@ -420,7 +420,7 @@ CollisionNotHole:
 
 WinShip:   
     // check if that is the winning score
-    nv_blt16_long(ship.score, astro_score_to_win, NoWinShip)
+    nv_blt16_far(ship.score, astro_score_to_win, NoWinShip)
     // if we get here then ship won
     lda #1
     rts
@@ -428,7 +428,7 @@ WinShip:
 ShipShieldUp:
     // Y Reg should still have the sprite number.
     sty temp        // store sprite number in temp
-    nv_blt16_long(frame_counter, next_possible_bounce_frame, NoBounce)
+    nv_blt16_far(frame_counter, next_possible_bounce_frame, NoBounce)
 
     // here so we need to bounce the ship/asteroid.
     ldy temp                       // sprite number back in Y
