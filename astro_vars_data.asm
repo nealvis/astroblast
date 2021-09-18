@@ -72,3 +72,6 @@ astro_multi_color1: .byte NV_COLOR_LITE_GREEN
 // is armed and prevents a player from just holding down the fire button.
 astro_joy1_no_fire_flag: .byte 1
 astro_joy2_no_fire_flag: .byte 1
+
+ship_2_next_possible_bounce_frame: .word $0000
+ship_1_next_possible_bounce_frame: .word $0000

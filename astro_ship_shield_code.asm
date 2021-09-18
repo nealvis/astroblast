@@ -172,8 +172,9 @@ ShipShieldStartDone:
 // Call check if shield is active for specified ship
 // subroutine params:
 //   accum: pass 1 for ship 1, or 2 for ship 2
-// upon return the accum will have a zero if shield not active
-// or nonzero if is active. 
+// Accum: upon return will have a zero if shield not active or nonzero if is
+// X Reg: unchanged
+// Y Reg: unchanged
 ShipShieldIsActive:
 {
 TryShip1:

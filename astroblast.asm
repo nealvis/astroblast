@@ -61,9 +61,6 @@ nv_b8_label: .text @"nv b8 coll sprite: \$00"
 #import "astro_ships_code.asm"
 #import "astro_ship_death_code.asm"
 #import "astro_ship_shield_code.asm"
-#import "astro_starfield_code.asm"
-#import "astro_turret_armer_code.asm"
-#import "../nv_c64_util/nv_joystick_code.asm"
 
 //////////////////////////////////////////////////////////////////////////////
 // charset is expected to be at $3000
@@ -71,6 +68,9 @@ nv_b8_label: .text @"nv b8 coll sprite: \$00"
 .import binary "astro_charset.bin"
 // end charset
 //////////////////////////////////////////////////////////////////////////////
+#import "astro_starfield_code.asm"
+#import "astro_turret_armer_code.asm"
+#import "../nv_c64_util/nv_joystick_code.asm"
 #import "astro_blackhole_code.asm"
 
 #import "astro_turret_code.asm"
@@ -344,71 +344,55 @@ NoToggle:
 // StepShipExhaust - end
 //////////////////////////////////////////////////////////////////////////////
 
+
+
 //////////////////////////////////////////////////////////////////////////////
 // subroutine to check collisions for ship 1 and update score accordingly
 // return value:
 //   Accum: will be non zero if ship has a winning score, or zero if
 //          it does not
 CheckCollisionsUpdateScoreShip1:
-{
-    jsr ship_1.CheckShipCollision
-    lda ship_1.collision_sprite     // closest_sprite, will be $FF 
-    bmi NoCollisionShip1            // if no collisions so check minus
-HandleCollisionShip1:
-    lda ship_1_death_count        // if ship1 is dead then ignore collisions
-    bne NoCollisionShip1
-    // get extra pointer for the sprite that ship1 collided with loaded
-    // so that we can then disable it
-    ldy ship_1.collision_sprite
-    cpy blackhole.sprite_num
-    bne CollisionNotHole
-    jsr HoleForceStop
-    jsr SlowMoStart
-    jsr SoundPlaySilenceFX
-    lda #0
-    rts
-
-CollisionNotHole:
-    lda #$01
-    jsr ShipShieldIsActive
-    bne NoCollisionShip1
-    jsr AstroSpriteExtraPtrToRegs 
-    jsr NvSpriteExtraDisable
-    jsr SoundPlayShip1AsteroidFX
-    nv_bcd_adc16_immediate(ship_1.score, $0001, ship_1.score)
-
-    // check if playing time based or score based game end
-    lda astro_end_on_seconds
-    bne NoWinShip1
-
-    nv_blt16(ship_1.score, astro_score_to_win, NoWinShip1)
-    // if we get here then ship1 has winning score
-    lda #1
-    rts
-    
-NoWinShip1:
-NoCollisionShip1:
-    lda #0
-    rts
-}
+    check_collisions_update_score_sr(ship_1, ship_1_death_count, 1, ship_1_next_possible_bounce_frame, SoundPlayShip1AsteroidFX)
 // CheckCollisionsUpdateScoreShip1 end
 //////////////////////////////////////////////////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////////////////
 // subroutine to check if ship 2 hit asteroid and update score accordingly
 // return values:
 //   Accum: will have 0 if ship didn't win, or non zero if ship won 
 CheckCollisionsUpdateScoreShip2:
+    check_collisions_update_score_sr(ship_2, ship_2_death_count, 2, ship_2_next_possible_bounce_frame, SoundPlayShip2AsteroidFX)
+// CheckCollisionsUpdateScoreShip2 end
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// macro subroutine to check if ship hit asteroid and update score 
+// accordingly
+// macro params:
+//   ship: is ship_1 or ship_2
+//   ship_death_count: is the address of the byte that holds the ships
+//                     death count.  it will be non zero if dead
+//   ship_num: is 1 for ship_1 or 2 for ship_2
+//   next_possible_bounce_frame: is the address of the word that 
+//                               holds the next frame at which this
+//                               ship will be able to bounce. 
+//  sound_fx_ship_hit_asteroid: is the address to jsr to play the ship
+//                              hit asteroid sound fx
+.macro check_collisions_update_score_sr(ship, ship_death_count, ship_num, next_possible_bounce_frame, sound_fx_ship_hit_asteroid)
 {
-    jsr ship_2.CheckShipCollision
-    lda ship_2.collision_sprite     // closest_sprite, will be $FF
-    bmi NoCollisionShip2            // if no collisions so check minus
-HandleCollisionShip2:
-    lda ship_2_death_count          // if ship2 is dead then ignore collisions
-    bne NoCollisionShip2
+    jsr ship.CheckShipCollision   // sets ship.collision_sprite
+    lda ship.collision_sprite     // closest_sprite, will be $FF
+    bpl HandleCollisionShip            // if no collisions so check minus
+    jmp NoCollisionShip
+HandleCollisionShip:
+    lda ship_death_count          // if ship is dead then ignore collisions
+    beq NoDeath
+    jmp NoCollisionShip
+NoDeath:
     // get extra pointer for the sprite that ship1 collided with loaded
     // so that we can then disable it
-    ldy ship_2.collision_sprite
+    ldy ship.collision_sprite
     cpy blackhole.sprite_num
     bne CollisionNotHole
     jsr HoleForceStop
@@ -418,33 +402,99 @@ HandleCollisionShip2:
     rts
 
 CollisionNotHole:
-    lda #$02
-    jsr ShipShieldIsActive
-    bne NoCollisionShip2
+    lda #ship_num
+    jsr ShipShieldIsActive              // will not change Y Reg
+    bne ShipShieldUp
 
-    jsr AstroSpriteExtraPtrToRegs 
+    jsr AstroSpriteExtraPtrToRegs       // Y Reg still has sprite number in it
     jsr NvSpriteExtraDisable
-    jsr SoundPlayShip2AsteroidFX
+    jsr sound_fx_ship_hit_asteroid
 
     // add one to ship score
-    nv_bcd_adc16_immediate(ship_2.score, $0001, ship_2.score)
+    nv_bcd_adc16_immediate(ship.score, $0001, ship.score)
 
     // check if playing time based or score based end 
     lda astro_end_on_seconds
-    bne NoWinShip2
-    
+    beq WinShip
+    jmp NoWinShip
+
+WinShip:   
     // check if that is the winning score
-    nv_blt16(ship_2.score, astro_score_to_win, NoWinShip2)
-    // if we get here then ship2 won
+    nv_blt16_long(ship.score, astro_score_to_win, NoWinShip)
+    // if we get here then ship won
     lda #1
     rts
-NoWinShip2:
-NoCollisionShip2:
+
+ShipShieldUp:
+    // Y Reg should still have the sprite number.
+    sty temp        // store sprite number in temp
+    nv_blt16_long(frame_counter, next_possible_bounce_frame, NoBounce)
+
+    // here so we need to bounce the ship/asteroid.
+    ldy temp                       // sprite number back in Y
+    jsr AstroSpriteExtraPtrToRegs  // load extra ptr to accum/X Reg
+    jsr NvSpriteGetHitboxCenter    // get asteroid's center x/y screen coords
+    nv_xfer16_mem_mem(nv_sprite_hitbox_center_x, asteroid_center_x)
+    nv_xfer16_mem_mem(nv_sprite_hitbox_center_y, asteroid_center_y)
+
+    jsr ship.LoadExtraPtrToRegs
+    jsr NvSpriteGetHitboxCenter    // get asteroid's center x/y screen coords
+    nv_xfer16_mem_mem(nv_sprite_hitbox_center_x, ship_center_x)
+    nv_xfer16_mem_mem(nv_sprite_hitbox_center_y, ship_center_y)
+
+BounceY:
+    nv_blt16(asteroid_center_y, ship_center_y, BounceAsteroidAbove)
+
+BounceAsteroidBelow:
+    ldy temp                       // sprite number back in Y
+    jsr AstroSpriteExtraPtrToRegs  // load extra ptr to accum/X Reg
+    jsr NvSpriteAssureVelPosY
+    jsr ship.LoadExtraPtrToRegs
+    jsr NvSpriteAssureVelNegY
+    jmp BounceX
+
+BounceAsteroidAbove:
+    ldy temp                       // sprite number back in Y
+    jsr AstroSpriteExtraPtrToRegs  // load extra ptr to accum/X Reg
+    jsr NvSpriteAssureVelNegY
+    jsr ship.LoadExtraPtrToRegs
+    jsr NvSpriteAssureVelPosY
+
+BounceX:
+    nv_blt16(asteroid_center_x, ship_center_x, BounceAsteroidLeft)
+
+BounceAsteroidRight:
+    ldy temp                       // sprite number back in Y
+    jsr AstroSpriteExtraPtrToRegs  // load extra ptr to accum/X Reg
+    jsr NvSpriteAssureVelPosX
+    jsr ship.LoadExtraPtrToRegs
+    jsr NvSpriteAssureVelNegX
+    jmp BounceDone
+
+BounceAsteroidLeft:
+    ldy temp                       // sprite number back in Y
+    jsr AstroSpriteExtraPtrToRegs  // load extra ptr to accum/X Reg
+    jsr NvSpriteAssureVelNegX
+    jsr ship.LoadExtraPtrToRegs
+    jsr NvSpriteAssureVelPosX
+
+BounceDone:
+    nv_adc16_immediate(frame_counter, 3, next_possible_bounce_frame)
+NoBounce:
+NoWinShip:
+NoCollisionShip:
     lda #0
     rts
+
+temp: .byte $00
+asteroid_center_x: .word $00
+asteroid_center_y: .word $00
+ship_center_x: .word $00
+ship_center_y: .word $00
 }
-// CheckCollisionsUpdateScoreShip2 end
+// check_collisions_update_score_sr end
 //////////////////////////////////////////////////////////////////////////////
+
 
 SlowMoStart:
 {
@@ -558,6 +608,8 @@ DoPostTitleInit:
     nv_store16_immediate(frame_counter, $0000)
     nv_store16_immediate(ship_1.score, $0000)
     nv_store16_immediate(ship_2.score, $0000)
+    nv_store16_immediate(ship_1_next_possible_bounce_frame, $0000)
+    nv_store16_immediate(ship_2_next_possible_bounce_frame, $0000)
 
     lda #$00
     sta sprite_collision_reg_value
@@ -941,11 +993,15 @@ DoneCheckingDisabledAsteroids:
 }
 
 //////////////////////////////////////////////////////////////////////////////
-//
+// Accum: holds ship number to shield
 DoShield:
 {
-    lda #1
+    tay
+    jsr ShipShieldIsActive
+    bne AlreadyShieldActive
+    tya
     jsr ShipShieldStart
+AlreadyShieldActive:
     rts
 }
 //
@@ -1114,6 +1170,7 @@ TryExperimental05:
     bne TryExperimental06                           
 WasExperimental05:
     //jsr SlowMoStart
+    lda #$01
     jsr DoShield
     jmp DoneKeys
 
@@ -1212,7 +1269,7 @@ Joy1TryDown:
     jsr JoyIsDown
     beq Joy1Done
     lda #$01
-    jsr ShipShieldStart
+    jsr DoShield
 Joy1Done:
 
 Joy2TryLeft:
@@ -1238,7 +1295,7 @@ Joy2TryDown:
     jsr JoyIsDown
     beq Joy2Done
     lda #$02
-    jsr ShipShieldStart
+    jsr DoShield
 
 Joy2Done:
 

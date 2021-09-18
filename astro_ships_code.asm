@@ -192,7 +192,7 @@ rect2: .word $0000, $0000  // (left, top)
     .label y_vel = info.base_addr + NV_SPRITE_VEL_Y_OFFSET
     .label data_ptr = info.base_addr + NV_SPRITE_DATA_PTR_OFFSET
     .label base_addr = info.base_addr
-
+    .label sprite_extra_addr = info.base_addr
 
 // the extra data that goes with the sprite
 sprite_extra:
