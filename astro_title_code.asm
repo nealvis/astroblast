@@ -355,7 +355,7 @@ TryPlus:
     cmp #TITLE_KEY_LONGER_GAME
     bne TryMinus
 WasPlus:
-    nv_bge16_immediate(astro_score_to_win, TITLE_MAX_GAME_LEN-TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
+    nv_bge16_immed(astro_score_to_win, TITLE_MAX_GAME_LEN-TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
     nv_bcd_adc16_immediate(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipAdd:
     jmp TitleDoneKeys                // and skip to bottom
@@ -364,7 +364,7 @@ TryMinus:
     cmp #TITLE_KEY_SHORTER_GAME
     bne TryTimedGame
 WasMinus:
-    nv_blt16_immediate(astro_score_to_win, TITLE_MIN_GAME_LEN+TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
+    nv_blt16_immed(astro_score_to_win, TITLE_MIN_GAME_LEN+TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
     nv_bcd_sbc16_immediate(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipSub:
     jmp TitleDoneKeys                // and skip to bottom

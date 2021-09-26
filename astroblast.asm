@@ -107,7 +107,7 @@ MainLoop:
     nv_adc16_immediate(second_partial_counter, 1, second_partial_counter)
     
     // check if a full second has elapsed
-    nv_bge16_immediate(second_partial_counter, ASTRO_FPS, FullSecond)
+    nv_bge16_immed(second_partial_counter, ASTRO_FPS, FullSecond)
     // not a full second (or time to change up) so do the regular frame stuff
     jmp RegularFrame
 
@@ -1377,12 +1377,12 @@ TurretLdaSmartFireTopID:
 {
 
 TurretSmartTopTryShip1Zone1:    
-    nv_bgt16_immediate(ship_1.x_loc, SMART_FIRE_ZONE_1_MAX, TurretSmartTopTryShip1Zone2)
+    nv_bgt16_immed(ship_1.x_loc, SMART_FIRE_ZONE_1_MAX, TurretSmartTopTryShip1Zone2)
     lda #TURRET_3_ID
     rts
 
 TurretSmartTopTryShip1Zone2:
-    nv_bgt16_immediate(ship_1.x_loc, SMART_FIRE_ZONE_2_MAX, TurretSmartTopTryShip1Zone3)
+    nv_bgt16_immed(ship_1.x_loc, SMART_FIRE_ZONE_2_MAX, TurretSmartTopTryShip1Zone3)
     lda #TURRET_2_ID
     rts
     
@@ -1401,12 +1401,12 @@ TurretSmartTopTryShip1Zone3:
 TurretLdaSmartFireBottomID:
 {
 TurretAutoTryShip2Zone1:    
-    nv_bgt16_immediate(ship_2.x_loc, SMART_FIRE_ZONE_1_MAX, TurretSmartBottomTryShip2Zone2)
+    nv_bgt16_immed(ship_2.x_loc, SMART_FIRE_ZONE_1_MAX, TurretSmartBottomTryShip2Zone2)
     lda #TURRET_6_ID
     rts
     
 TurretSmartBottomTryShip2Zone2:
-    nv_bgt16_immediate(ship_2.x_loc, SMART_FIRE_ZONE_2_MAX, TurretSmartBottomTryShip2Zone3)
+    nv_bgt16_immed(ship_2.x_loc, SMART_FIRE_ZONE_2_MAX, TurretSmartBottomTryShip2Zone3)
     lda #TURRET_5_ID
     rts
 

@@ -64,7 +64,7 @@ WindCheckLeftShip1:
     bpl WindCheckLeftShip2  // ship1 x_vel + so not going backwards
 
     // if pushing ship off left of screen, then just set its velocity to 1
-    nv_bgt16_immediate(ship_1.x_loc, WIND_SHIP_MIN_LEFT, WindCheckLeftShip2)
+    nv_bgt16_immed(ship_1.x_loc, WIND_SHIP_MIN_LEFT, WindCheckLeftShip2)
     lda #$01
     sta ship_1.x_vel
     lda #$01
@@ -75,7 +75,7 @@ WindCheckLeftShip2:
     bpl CheckGlimmerFrame   // ship2 x_vel positive, not going back
 
     // if pushing ship off left of screen, then just set its velocity to 1
-    nv_bgt16_immediate(ship_2.x_loc, WIND_SHIP_MIN_LEFT, CheckGlimmerFrame)
+    nv_bgt16_immed(ship_2.x_loc, WIND_SHIP_MIN_LEFT, CheckGlimmerFrame)
     lda #$01
     sta ship_2.x_vel
     lda #$01
@@ -114,10 +114,10 @@ CheckWindCount:
     lda wind_ship_1_done        // check if done with ship 1 already
     bne WindSetDecShip2
 
-    nv_blt16_immediate(ship_1.x_loc, WIND_X_ZONE_2, WindAdjustVelShip1)
+    nv_blt16_immed(ship_1.x_loc, WIND_X_ZONE_2, WindAdjustVelShip1)
     dec wind_ship1_dec_value    // decrement value to -2
 
-    nv_blt16_immediate(ship_1.x_loc, WIND_X_ZONE_3, WindAdjustVelShip1)
+    nv_blt16_immed(ship_1.x_loc, WIND_X_ZONE_3, WindAdjustVelShip1)
     dec wind_ship1_dec_value    // decrement value to -3
 
 WindAdjustVelShip1:
@@ -135,10 +135,10 @@ WindSetVelShip1:
 WindSetDecShip2:
     lda wind_ship_2_done
     bne WindDoneVelShip2
-    nv_blt16_immediate(ship_2.x_loc, WIND_X_ZONE_2, WindAdjustVelShip2)
+    nv_blt16_immed(ship_2.x_loc, WIND_X_ZONE_2, WindAdjustVelShip2)
     dec wind_ship2_dec_value    // decrement value to -2
 
-    nv_blt16_immediate(ship_2.x_loc, WIND_X_ZONE_3, WindAdjustVelShip2)
+    nv_blt16_immed(ship_2.x_loc, WIND_X_ZONE_3, WindAdjustVelShip2)
     dec wind_ship2_dec_value    // decrement value to -3
 
 WindAdjustVelShip2:

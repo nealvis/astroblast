@@ -61,7 +61,7 @@ Ship1DeathStep:
 
 ShipDeathFramesStart:
     // if pushing ship off left of screen, then just set its x velocity to 1
-    nv_bgt16_immediate(ship_1.x_loc, SHIP_DEATH_MIN_LEFT, ShipDeathTrySetRetreatVel)
+    nv_bgt16_immed(ship_1.x_loc, SHIP_DEATH_MIN_LEFT, ShipDeathTrySetRetreatVel)
     lda #$00
     sta ship_1.x_vel
     
@@ -104,7 +104,7 @@ Ship2DeathStep:
 
 Ship2DeathFramesStart:
     // if pushing ship off left of screen, then just set its velocity to 1
-    nv_bgt16_immediate(ship_2.x_loc, SHIP_DEATH_MIN_LEFT, Ship2DeathTrySetRetreatVel)
+    nv_bgt16_immed(ship_2.x_loc, SHIP_DEATH_MIN_LEFT, Ship2DeathTrySetRetreatVel)
     lda #$00
     sta ship_2.x_vel
     

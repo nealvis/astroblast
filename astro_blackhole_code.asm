@@ -125,7 +125,7 @@ Change:
     sta blackhole.y_vel              // store new y vel
 NoChange:    
     jsr blackhole.MoveInExtraData
-    nv_bgt16_immediate(blackhole.x_loc, 20, HoleStillAlive)
+    nv_bgt16_immed(blackhole.x_loc, 20, HoleStillAlive)
     // hole is done if we get here
     jsr HoleForceStop
     rts
