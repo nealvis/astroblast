@@ -154,7 +154,7 @@ CheckOverlapChar:
     rts
 
 SetColorDead:
-    nv_sprite_set_raw_color_immediate(sprite_num, NV_COLOR_GREY)
+    nv_sprite_set_raw_color_immed(sprite_num, NV_COLOR_GREY)
     rts
 
 SetColorAlive:
@@ -306,14 +306,14 @@ DoneShip2IncVelX:
 
 
 SetColorDead:
-    nv_sprite_set_raw_color_immediate(sprite_num, NV_COLOR_GREY)
+    nv_sprite_set_raw_color_immed(sprite_num, NV_COLOR_GREY)
     rts
 
 SetColorAlive:
     //lda #>info.base_addr
     //ldx #<info.base_addr
     //nv_sprite_set_color_from_extra_sr()
-    nv_sprite_set_raw_color_immediate(sprite_num, NV_COLOR_BROWN)
+    nv_sprite_set_raw_color_immed(sprite_num, NV_COLOR_BROWN)
     rts
 
 
