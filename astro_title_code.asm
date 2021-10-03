@@ -137,7 +137,7 @@ TitleStart:
     jsr StarStart
 
     // set up ship 1 to rotate around the top of the screen
-    nv_store16_immediate(ship_1.x_loc, 50)
+    nv_store16_immed(ship_1.x_loc, 50)
     lda #52
     sta ship_1.y_loc
     lda #0
@@ -147,7 +147,7 @@ TitleStart:
     jsr ship_1.Enable
 
     // set up ship 2 to rotate around the bottom of the screen
-    nv_store16_immediate(ship_2.x_loc, 50)
+    nv_store16_immed(ship_2.x_loc, 50)
     lda #226
     sta ship_2.y_loc
     lda #0

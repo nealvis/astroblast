@@ -144,7 +144,7 @@ DoneEndOnSeconds:
 
     // clear partial second counter which counts frame up to a 
     // full second then back to zero
-    nv_store16_immediate(second_partial_counter, $0000)
+    nv_store16_immed(second_partial_counter, $0000)
 
     // now check the "change up" stuff that happens once per x seconds
     lda #ASTRO_CHANGE_UP_MASK
@@ -558,7 +558,7 @@ DoPreTitleInit:
     sta astro_diff_mode
 
     // set the default game seconds
-    nv_store16_immediate(astro_game_seconds, ASTRO_GAME_SECONDS_DEFAULT)
+    nv_store16_immed(astro_game_seconds, ASTRO_GAME_SECONDS_DEFAULT)
 
     // set default, play to reach seconds or to reach score
     lda #0
@@ -568,7 +568,7 @@ DoPreTitleInit:
     nv_sprite_raw_set_multicolors(NV_COLOR_LITE_GREEN, NV_COLOR_LITE_GREY)
 
     // setup the score required to win to default value
-    nv_store16_immediate(astro_score_to_win, ASTRO_DEFAULT_SCORE_TO_WIN)
+    nv_store16_immed(astro_score_to_win, ASTRO_DEFAULT_SCORE_TO_WIN)
 
     // setup everything for the sprite_ship so its ready to enable
     jsr ship_1.Setup
@@ -603,13 +603,13 @@ DoPreTitleInit:
 // title screen is started
 DoPostTitleInit:
 {
-    nv_store16_immediate(second_counter, $0000)
-    nv_store16_immediate(second_partial_counter, $0000)
-    nv_store16_immediate(frame_counter, $0000)
-    nv_store16_immediate(ship_1.score, $0000)
-    nv_store16_immediate(ship_2.score, $0000)
-    nv_store16_immediate(ship_1_next_possible_bounce_frame, $0000)
-    nv_store16_immediate(ship_2_next_possible_bounce_frame, $0000)
+    nv_store16_immed(second_counter, $0000)
+    nv_store16_immed(second_partial_counter, $0000)
+    nv_store16_immed(frame_counter, $0000)
+    nv_store16_immed(ship_1.score, $0000)
+    nv_store16_immed(ship_2.score, $0000)
+    nv_store16_immed(ship_1_next_possible_bounce_frame, $0000)
+    nv_store16_immed(ship_2_next_possible_bounce_frame, $0000)
 
     lda #$00
     sta sprite_collision_reg_value
@@ -658,7 +658,7 @@ DoPostTitleInit:
     .const SHIP2_INIT_Y_VEL = 1
 
     // init ship 1
-    nv_store16_immediate(ship_1.x_loc, SHIP1_INIT_X_LOC) 
+    nv_store16_immed(ship_1.x_loc, SHIP1_INIT_X_LOC) 
     lda #SHIP1_INIT_Y_LOC
     sta ship_1.y_loc
     lda #SHIP1_INIT_X_VEL
@@ -670,7 +670,7 @@ DoPostTitleInit:
 
 
     // init ship 2
-    nv_store16_immediate(ship_2.x_loc, 0) 
+    nv_store16_immed(ship_2.x_loc, 0) 
     lda #SHIP2_INIT_Y_LOC
     sta ship_2.y_loc
     lda #SHIP2_INIT_X_VEL
@@ -766,7 +766,7 @@ DoWinner:
     nv_bge16(ship_1.score, ship_2.score, WinnerShip1)
 
 WinnerShip2:
-    nv_store16_immediate(ship_2.x_loc, WINNER_SHIP_X_LOC)
+    nv_store16_immed(ship_2.x_loc, WINNER_SHIP_X_LOC)
     lda #WINNER_SHIP_Y_LOC
     sta ship_2.y_loc
     jsr ship_2.SetLocationFromExtraData
@@ -775,7 +775,7 @@ WinnerShip2:
     jmp WinnerWaitForKey
 
 WinnerShip1:
-    nv_store16_immediate(ship_1.x_loc, WINNER_SHIP_X_LOC)
+    nv_store16_immed(ship_1.x_loc, WINNER_SHIP_X_LOC)
     lda #WINNER_SHIP_Y_LOC
     sta ship_1.y_loc
     jsr ship_1.SetLocationFromExtraData
@@ -787,7 +787,7 @@ WinnerTie:
     nv_screen_poke_color_str(WINNER_TEXT_ROW, WINNER_TEXT_COL, NV_COLOR_WHITE, winner_tie_str)
 
     // display ship 1
-    nv_store16_immediate(ship_1.x_loc, WINNER_SHIP_X_LOC)
+    nv_store16_immed(ship_1.x_loc, WINNER_SHIP_X_LOC)
     lda #WINNER_SHIP_Y_LOC
     sta ship_1.y_loc
     jsr ship_1.SetLocationFromExtraData
@@ -795,7 +795,7 @@ WinnerTie:
     jsr ship_1.Enable
 
     // display ship 2
-    nv_store16_immediate(ship_2.x_loc, WINNER_TIE_SHIP_X_LOC)
+    nv_store16_immed(ship_2.x_loc, WINNER_TIE_SHIP_X_LOC)
     lda #WINNER_TIE_SHIP_Y_LOC
     sta ship_2.y_loc
     jsr ship_2.SetLocationFromExtraData
@@ -871,7 +871,7 @@ TryEasy:
     bne TryMed
 IsEasy:
     // Set easy mode params here
-    nv_store16_immediate(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY)
+    nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY)
     jmp DoneDiffParams
 
 TryMed:
@@ -879,13 +879,13 @@ TryMed:
     bne TryHard
 IsMed:
     // Set medium mode params here
-    nv_store16_immediate(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_MED)
+    nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_MED)
     jmp DoneDiffParams
 
 TryHard:
     // if wasn't easy or medium, assume hard
     // set hard mode params here
-    nv_store16_immediate(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_HARD)
+    nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_HARD)
 
 
     // fall through to done

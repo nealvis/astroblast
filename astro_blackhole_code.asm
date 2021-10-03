@@ -50,7 +50,7 @@ HoleStart:
     lda #>sprite_hole_0
     jsr blackhole.SetDataPtr
 
-    nv_store16_immediate(blackhole.x_loc, NV_SPRITE_RIGHT_WRAP_DEFAULT)
+    nv_store16_immed(blackhole.x_loc, NV_SPRITE_RIGHT_WRAP_DEFAULT)
     //lda #NV_SPRITE_TOP_WRAP_DEFAULT
     nv_rand_byte_a(true)
     //and #$7F
