@@ -132,7 +132,7 @@ CheckEndOnSeconds:
     lda astro_end_on_seconds
     beq DoneEndOnSeconds
         // playing until some number of seconds elapses
-        nv_bcd_sbc16_immediate(astro_game_seconds, $0001, astro_game_seconds)
+        nv_bcd_sbc16_immed(astro_game_seconds, $0001, astro_game_seconds)
         nv_screen_poke_hex_word_mem(ASTRO_GAME_SECONDS_ROW, ASTRO_GAME_SECONDS_COL, astro_game_seconds, false)
         lda astro_game_seconds
         bne DoneEndOnSeconds

@@ -365,7 +365,7 @@ TryMinus:
     bne TryTimedGame
 WasMinus:
     nv_blt16_immed(astro_score_to_win, TITLE_MIN_GAME_LEN+TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
-    nv_bcd_sbc16_immediate(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
+    nv_bcd_sbc16_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipSub:
     jmp TitleDoneKeys                // and skip to bottom
 
