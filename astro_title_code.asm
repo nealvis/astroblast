@@ -356,7 +356,7 @@ TryPlus:
     bne TryMinus
 WasPlus:
     nv_bge16_immed(astro_score_to_win, TITLE_MAX_GAME_LEN-TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
-    nv_bcd_adc16_immediate(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
+    nv_bcd_adc16_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipAdd:
     jmp TitleDoneKeys                // and skip to bottom
 

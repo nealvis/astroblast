@@ -411,7 +411,7 @@ CollisionNotHole:
     jsr sound_fx_ship_hit_asteroid
 
     // add one to ship score
-    nv_bcd_adc16_immediate(ship.score, $0001, ship.score)
+    nv_bcd_adc16_immed(ship.score, $0001, ship.score)
 
     // check if playing time based or score based end 
     lda astro_end_on_seconds
