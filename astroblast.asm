@@ -103,8 +103,8 @@ RunGame:
 
 MainLoop:
 
-    nv_adc16_immediate(frame_counter, 1, frame_counter)
-    nv_adc16_immediate(second_partial_counter, 1, second_partial_counter)
+    nv_adc16_immed(frame_counter, 1, frame_counter)
+    nv_adc16_immed(second_partial_counter, 1, second_partial_counter)
     
     // check if a full second has elapsed
     nv_bge16_immed(second_partial_counter, ASTRO_FPS, FullSecond)
@@ -115,7 +115,7 @@ FullSecond:
     // a full second has elapsed, do the stuff that we do once per second
 
     // add one to the second counter and display second counter
-    nv_adc16_immediate(second_counter, 1, second_counter)
+    nv_adc16_immed(second_counter, 1, second_counter)
     .if (showFrameCounters)
     {
         nv_screen_poke_hex_word_mem(0, 7, second_counter, true)
@@ -309,7 +309,7 @@ HoleIsActive:
     jsr HoleStep
     nv_ble16(frame_counter, astro_hole_restart_sound_frame, DoneDoHoleStep)
     jsr SoundPlayHoleFX
-    nv_adc16_immediate(frame_counter, HOLE_SOUND_FRAMES, astro_hole_restart_sound_frame)
+    nv_adc16_immed(frame_counter, HOLE_SOUND_FRAMES, astro_hole_restart_sound_frame)
 DoneDoHoleStep:
     rts
 }
@@ -479,7 +479,7 @@ BounceAsteroidLeft:
     jsr NvSpriteAssureVelPosX
 
 BounceDone:
-    nv_adc16_immediate(frame_counter, 3, next_possible_bounce_frame)
+    nv_adc16_immed(frame_counter, 3, next_possible_bounce_frame)
 NoBounce:
 NoWinShip:
 NoCollisionShip:
@@ -912,7 +912,7 @@ ChangeUp:
     .const COLOR_MASK = $0F
 
     // increment the changeup counter.
-    nv_adc16_immediate(change_up_counter, 1, change_up_counter)
+    nv_adc16_immed(change_up_counter, 1, change_up_counter)
 
     inc cycling_color
     lda cycling_color
@@ -947,7 +947,7 @@ SkipAsteroidMin:
     bne NoHole
     jsr HoleStart
     jsr SoundPlayHoleFX
-    nv_adc16_immediate(frame_counter, HOLE_SOUND_FRAMES, astro_hole_restart_sound_frame)
+    nv_adc16_immed(frame_counter, HOLE_SOUND_FRAMES, astro_hole_restart_sound_frame)
 
 NoHole:
 
@@ -1180,7 +1180,7 @@ TryExperimental06:
 WasExperimental06:
     jsr HoleStart
     jsr SoundPlayHoleFX
-    nv_adc16_immediate(frame_counter, HOLE_SOUND_FRAMES, astro_hole_restart_sound_frame)
+    nv_adc16_immed(frame_counter, HOLE_SOUND_FRAMES, astro_hole_restart_sound_frame)
     jmp DoneKeys
 }
 
