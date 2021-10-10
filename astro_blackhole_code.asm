@@ -214,14 +214,14 @@ HoleUpdateRect:
 {
     /////////// put hole sprite's rectangle, use the hitbox not full sprite
     nv_xfer16_mem_mem(blackhole.x_loc, hole_x_left)
-    nv_adc16_8(hole_x_left, blackhole.hitbox_right, hole_x_right)
-    nv_adc16_8(hole_x_left, blackhole.hitbox_left, hole_x_left)
+    nv_adc16x_mem16x_mem8u(hole_x_left, blackhole.hitbox_right, hole_x_right)
+    nv_adc16x_mem16x_mem8u(hole_x_left, blackhole.hitbox_left, hole_x_left)
     lda blackhole.y_loc     // 8 bit value so manually load MSB with $00
     sta hole_y_top
     lda #$00
     sta hole_y_top+1
-    nv_adc16_8(hole_y_top, blackhole.hitbox_bottom, hole_y_bottom)
-    nv_adc16_8(hole_y_top, blackhole.hitbox_top, hole_y_top)
+    nv_adc16x_mem16x_mem8u(hole_y_top, blackhole.hitbox_bottom, hole_y_bottom)
+    nv_adc16x_mem16x_mem8u(hole_y_top, blackhole.hitbox_top, hole_y_top)
     rts
 }
 // HoleUpdateRect - end
