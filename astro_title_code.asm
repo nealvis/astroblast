@@ -356,7 +356,7 @@ TryPlus:
     bne TryMinus
 WasPlus:
     nv_bge16_immed(astro_score_to_win, TITLE_MAX_GAME_LEN-TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
-    nv_bcd_adc16_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
+    nv_bcd_adc16_mem_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipAdd:
     jmp TitleDoneKeys                // and skip to bottom
 
@@ -365,7 +365,7 @@ TryMinus:
     bne TryTimedGame
 WasMinus:
     nv_blt16_immed(astro_score_to_win, TITLE_MIN_GAME_LEN+TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
-    nv_bcd_sbc16_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
+    nv_bcd_sbc16_mem_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipSub:
     jmp TitleDoneKeys                // and skip to bottom
 

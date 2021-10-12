@@ -132,7 +132,7 @@ CheckEndOnSeconds:
     lda astro_end_on_seconds
     beq DoneEndOnSeconds
         // playing until some number of seconds elapses
-        nv_bcd_sbc16_immed(astro_game_seconds, $0001, astro_game_seconds)
+        nv_bcd_sbc16_mem_immed(astro_game_seconds, $0001, astro_game_seconds)
         nv_screen_poke_hex_word_mem(ASTRO_GAME_SECONDS_ROW, ASTRO_GAME_SECONDS_COL, astro_game_seconds, false)
         lda astro_game_seconds
         bne DoneEndOnSeconds
@@ -411,7 +411,7 @@ CollisionNotHole:
     jsr sound_fx_ship_hit_asteroid
 
     // add one to ship score
-    nv_bcd_adc16_immed(ship.score, $0001, ship.score)
+    nv_bcd_adc16_mem_immed(ship.score, $0001, ship.score)
 
     // check if playing time based or score based end 
     lda astro_end_on_seconds
