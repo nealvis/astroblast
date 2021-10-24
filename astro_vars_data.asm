@@ -75,3 +75,4 @@ astro_joy2_no_fire_flag: .byte 1
 
 ship_2_next_possible_bounce_frame: .word $0000
 ship_1_next_possible_bounce_frame: .word $0000
+

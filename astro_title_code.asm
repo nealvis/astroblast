@@ -17,7 +17,7 @@
 #import "astro_sound.asm"
 #import "astro_stream_processor_code.asm"
 #import "astro_ships_code.asm"
-
+#import "astro_help_code.asm"
 
 astro_title_str:     .text @"     astroblast \$00"
 
@@ -62,6 +62,7 @@ play_flag: .byte $00
 .const TITLE_KEY_PLAY         = NV_KEY_P
 .const TITLE_KEY_LONGER_GAME  = NV_KEY_PLUS
 .const TITLE_KEY_SHORTER_GAME = NV_KEY_MINUS
+.const TITLE_KEY_HELP         = NV_KEY_F1
 
 .var index
 
@@ -379,11 +380,17 @@ WasTimedGame:
 
 TryScoredGame:
     cmp #TITLE_KEY_SCORED_GAME
-    bne TryPlay
+    bne TryHelp
 WasScoredGame:
     lda #0
     sta astro_end_on_seconds
     jmp TitleDoneKeys                // and skip to bottom
+
+TryHelp:
+    nv_bne8_immed_a(TITLE_KEY_HELP, TryPlay)
+WasHelp:
+    jsr TitleDoHelp
+    jmp TitleDoneKeys
 
 TryPlay:
     cmp #TITLE_KEY_PLAY               
@@ -406,4 +413,26 @@ TitleDoneKeys:
     rts
 }
 // TitleDoKeyboard - end
+//////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+TitleDoHelp:
+{
+    jsr ship_1.Disable
+    jsr ship_2.Disable
+
+    jsr StarForceStop
+    jsr StarCleanup
+    jsr HelpStart
+    jsr StarInit
+    jsr StarStart
+
+    jsr ship_1.Enable
+    jsr ship_2.Enable
+
+    rts
+}
+//
 //////////////////////////////////////////////////////////////////////////////
