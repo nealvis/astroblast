@@ -33,8 +33,8 @@ title_score_based_str: .text @" s key .. len=score\$00"
 title_plus_str:     .text @" \$40 key .. longer\$00"
 title_minus_str:    .text @" \$5b key .. shorter\$00"
 title_game_len_str:    .text @" len   ..\$00"
-title_blank4_str:      .text @"    "
-
+title_blank4_str:      .text @"    \$00"
+title_help_str:        .text @"f1 key for help\$00"
 
 play_flag: .byte $00
 
@@ -171,6 +171,9 @@ TitleLoop:
     ldx #<title_rect_stream
     ldy #>title_rect_stream
     jsr AstroStreamProcessor
+
+    nv_screen_poke_color_str(24, 0, NV_COLOR_YELLOW, title_help_str)
+
 
     .var poke_row = TITLE_ROW_START + 1
     nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, astro_title_str)
