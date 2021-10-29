@@ -12,7 +12,7 @@
 #importonce 
 #import "../nv_c64_util/nv_c64_util_macs_and_data.asm"
 #import "astro_vars_data.asm"
-#import "astro_starfield_code.asm"
+//#import "astro_starfield_code.asm"
 #import "astro_keyboard_macs.asm"
 #import "astro_sound.asm"
 #import "astro_stream_processor_code.asm"
@@ -118,7 +118,7 @@ title_rect_stream:
     .byte $FF
 
 //////////////////////////////////////////////////////////////////////////////
-// call once to initialize starfield variables and stuff
+// call once to initialize variables and stuff
 // must call the following before calling this
 //   nv_key_init
 //   SoundInit
@@ -134,8 +134,8 @@ TitleStart:
     lda #ASTRO_SOUND_TITLE_TUNE
     jsr SoundInit
 
-    jsr StarInit
-    jsr StarStart
+    //jsr StarInit
+    //jsr StarStart
 
     // set up ship 1 to rotate around the top of the screen
     nv_store16_immed(ship_1.x_loc, 50)
@@ -166,7 +166,7 @@ TitleLoop:
     SoundDoStep()
     jsr ship_1.SetLocationFromExtraData
     jsr ship_2.SetLocationFromExtraData
-    jsr StarStep
+    //jsr StarStep
 
     ldx #<title_rect_stream
     ldy #>title_rect_stream
@@ -262,7 +262,7 @@ TitleNoQuit:
 
 TitleDone:
     nv_xfer16_mem_mem(astro_score_to_win, astro_game_seconds)
-    jsr StarCleanup
+    //jsr StarCleanup
     lda play_flag
     beq QuitGame
 PlayGame:
@@ -426,11 +426,11 @@ TitleDoHelp:
     jsr ship_1.Disable
     jsr ship_2.Disable
 
-    jsr StarForceStop
-    jsr StarCleanup
+    //jsr StarForceStop
+    //jsr StarCleanup
     jsr HelpStart
-    jsr StarInit
-    jsr StarStart
+    //jsr StarInit
+    //jsr StarStart
 
     jsr ship_1.Enable
     jsr ship_2.Enable

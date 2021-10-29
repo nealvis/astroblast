@@ -570,6 +570,8 @@ DoPreTitleInit:
     // setup the score required to win to default value
     nv_store16_immed(astro_score_to_win, ASTRO_DEFAULT_SCORE_TO_WIN)
 
+    nv_xfer8x_immed_mem(1, astro_single_player_flag)
+
     // setup everything for the sprite_ship so its ready to enable
     jsr ship_1.Setup
     jsr ship_2.Setup
