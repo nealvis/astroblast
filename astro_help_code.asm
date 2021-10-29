@@ -25,10 +25,10 @@ astro_help_02_str: .text @"\$00"
 astro_help_03_str: .text @"general\$00"
 astro_help_04_str: .text @"score by steering into asteroids\$00"
 astro_help_05_str: .text @"ships always move left to right\$00" 
-astro_help_06_str: .text @"\$00"
-astro_help_07_str: .text @"controls\$00"
-astro_help_08_str: .text @"joystick 1     controls top ship\$00"
-astro_help_09_str: .text @"joystick 2     controls bottom ship\$00"
+astro_help_06_str: .text @"joystick 1 controls top ship\$00"
+astro_help_07_str: .text @"joystick 2 controls bottom ship\$00"
+astro_help_08_str: .text @"\$00"
+astro_help_09_str: .text @"controls\$00"
 astro_help_10_str: .text @"joystick left  slows down ship\$00" 
 astro_help_11_str: .text @"joystick right speeds up ship\$00"
 astro_help_12_str: .text @"joystick down  shields ship\$00"
@@ -69,9 +69,9 @@ HelpStart:
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_04_str)
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_05_str)
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_06_str)
-    nv_screen_poke_color_str(poke_row++, text_col, SUBHEAD_COLOR, astro_help_07_str)
+    nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_07_str)
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_08_str)
-    nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_09_str)
+    nv_screen_poke_color_str(poke_row++, text_col, SUBHEAD_COLOR, astro_help_09_str)
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_10_str)
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_11_str)
     nv_screen_poke_color_str(poke_row++, text_col, TEXT_COLOR, astro_help_12_str)
