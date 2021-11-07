@@ -12,36 +12,115 @@
 #importonce 
 #import "../nv_c64_util/nv_c64_util_macs_and_data.asm"
 #import "astro_vars_data.asm"
-//#import "astro_starfield_code.asm"
 #import "astro_keyboard_macs.asm"
 #import "astro_sound.asm"
 #import "astro_stream_processor_code.asm"
 #import "astro_ships_code.asm"
 #import "astro_help_code.asm"
 
-astro_title_str:     .text @"     astroblast \$00"
+//////////////////////////////////////////////////////////////////////////////
+// macro to allocate a string of underline chars in place
+// macro params:
+//   len: the number of underline chars
+//   null_term: pass true to add a null terminator to the end of string
+//              or false not to.
+.macro UnderlineStr(len, null_term)
+{
+    .var index = 0
+    .for(index = 0; index<len; index=index+1)
+    {
+        .text @"\$44"
+    }
+    .if (null_term)
+    {
+        .text @"\$00"
+    }
+} 
 
-title_quit_str:        .text @" q key .. quit\$00"
-title_play_str:        .text @" p key .. play\$00"
-title_vol_up_str:      .text @" < key .. vol down\$00"
-title_vol_down_str:    .text @" > key .. vol up\$00"
-title_easy_mode_str:   .text @" e key .. easy\$00"
-title_med_mode_str:    .text @" m key .. med\$00"
-title_hard_mode_str:   .text @" h key .. hard\$00"
-title_time_based_str:  .text @" t key .. len=time\$00"
-title_score_based_str: .text @" s key .. len=score\$00"
-title_plus_str:     .text @" \$40 key .. shorter\$00"
-title_minus_str:    .text @" \$5b key .. longer\$00"
-title_game_len_str:    .text @" len   ..\$00"
+//////////////////////////////////////////////////////////////////////////////
+// macro to allocate a string of space chars in place
+// macro params:
+//   len: the number of space chars
+//   null_term: pass true to add a null terminator to the end of string
+//              or false not to.
+.macro SpaceStr(len, null_term)
+{
+    .var index = 0
+    .for(index = 0; index<len; index=index+1)
+    {
+        .text @" "
+    }
+    .if (null_term)
+    {
+        .text @"\$00"
+    }
+} 
+
+//////////////////////////////////////////////////////////////////////////////
+// macro to allocate a string of double underline chars in place
+// macro params:
+//   len: the number of double underline chars
+//   null_term: pass true to add a null terminator to the end of string
+//              or false not to.
+
+.macro DoubleUnderlineStr(len, null_term)
+{
+    .var index = 0
+    .for(index = 0; index<len; index=index+1)
+    {
+        .text @"\$78"
+    }
+    .if (null_term)
+    {
+        .text @"\$00"
+    }
+} 
+
+// title screen title text
+astro_title_str:      .text @"            astroblast\$00"
+astro_titlea_str:     SpaceStr(12, false)
+                      DoubleUnderlineStr(10, true)
+
+// number of players menu
+title_text_num_players_1_str:  .text @" num players\$00"
+title_text_num_players_2_str:  SpaceStr(1, false) 
+                               UnderlineStr(11, true) 
+title_text_num_players_3_str:  .text @" 1 .. one player\$00"
+title_text_num_players_4_str:  .text @" 2 .. two players\$00" 
+
+// general menu
+title_text_general_1_str:    .text @"general\$00"
+title_text_general_2_str:   UnderlineStr(7, true) 
+title_text_general_3_str:    .text @"f1 .. help\$00"
+title_text_general_4_str:    .text @"q  .. quit\$00" 
+title_text_general_5_str:    .text @"p  .. play\$00"
+title_text_general_6_str:    .text @"<  .. vol down\$00"    
+title_text_general_7_str:    .text @">  .. vol up\$00"
+
+// game length menu
+title_text_game_len_1_str:    .text @" game len \$00"
+title_text_game_len_2_str:   SpaceStr(1, false)
+                              UnderlineStr(14, true)
+title_text_game_len_3_str:    .text @" t .. time based\$00"
+title_text_game_len_4_str:    .text @" s .. score based\$00"
+title_text_game_len_5_str:    .text @" \$40 .. shorter\$00"
+title_text_game_len_6_str:    .text @" \$5b .. longer\$00"
+
+// difficulty menu
+title_text_difficulty_1_str:    .text @" difficulty\$00"
+title_text_difficulty_2_str: SpaceStr(1, false)  
+                             UnderlineStr(10, true)
+title_text_difficulty_3_str:    .text @" e .. easy\$00"
+title_text_difficulty_4_str:    .text @" m .. medium\$00"
+title_text_difficulty_5_str:    .text @" h .. hard\$00"
+
 title_blank4_str:      .text @"    \$00"
-title_help_str:        .text @"f1 key for help\$00"
-
 play_flag: .byte $00
 
 .const TITLE_KEY_COOL_DURATION = $08
-.const TITLE_RECT_WIDTH = 20
+.const TITLE_RECT_WIDTH = 34
 .const TITLE_RECT_HEIGHT = 19
-.const TITLE_ROW_START = 3
+.const TITLE_ROW_START = 2
 .const TITLE_COL_START = NV_SCREEN_CHARS_PER_ROW/2 -(TITLE_RECT_WIDTH/2) 
 
 .const TRS = TITLE_ROW_START
@@ -63,9 +142,24 @@ play_flag: .byte $00
 .const TITLE_KEY_LONGER_GAME  = NV_KEY_PLUS
 .const TITLE_KEY_SHORTER_GAME = NV_KEY_MINUS
 .const TITLE_KEY_HELP         = NV_KEY_F1
+.const TITLE_KEY_ONE_PLAYER   = NV_KEY_1
+.const TITLE_KEY_TWO_PLAYER   = NV_KEY_2
+
+.const TITLE_GENERAL_ROW = 6
+.const TITLE_GENERAL_COL = 3
+
+.const TITLE_NUM_PLAYERS_ROW  = 6
+.const TITLE_NUM_PLAYERS_COL  = 20
+
+.const TITLE_GAME_LEN_ROW  = 14
+.const TITLE_GAME_LEN_COL  = 20
+
+.const TITLE_DIFFICULTY_ROW  = 14
+.const TITLE_DIFFICULTY_COL  = 2
 
 .var index
 
+/*
 title_rect_top_char_addr_list:
     .for (index = 0; index < TITLE_RECT_WIDTH; index = index+1)
     {
@@ -116,6 +210,8 @@ title_rect_stream:
     // stream done
     .word $FFFF
     .byte $FF
+*/
+
 
 //////////////////////////////////////////////////////////////////////////////
 // call once to initialize variables and stuff
@@ -139,7 +235,7 @@ TitleStart:
 
     // set up ship 1 to rotate around the top of the screen
     nv_store16_immed(ship_1.x_loc, 50)
-    lda #52
+    lda #47
     sta ship_1.y_loc
     lda #0
     sta ship_1.y_vel
@@ -149,7 +245,7 @@ TitleStart:
 
     // set up ship 2 to rotate around the bottom of the screen
     nv_store16_immed(ship_2.x_loc, 50)
-    lda #226
+    lda #232
     sta ship_2.y_loc
     lda #0
     sta ship_2.y_vel
@@ -162,94 +258,26 @@ TitleStart:
 
 TitleLoop:
     nv_sprite_wait_last_scanline()         // wait for particular scanline.
-    //jsr JoyScan
     SoundDoStep()
     jsr ship_1.SetLocationFromExtraData
     jsr ship_2.SetLocationFromExtraData
-    //jsr StarStep
 
-    ldx #<title_rect_stream
-    ldy #>title_rect_stream
-    jsr AstroStreamProcessor
-
-    nv_screen_poke_color_str(24, 0, NV_COLOR_YELLOW, title_help_str)
-
+    //ldx #<title_rect_stream
+    //ldy #>title_rect_stream
+    //jsr AstroStreamProcessor
 
     .var poke_row = TITLE_ROW_START + 1
     nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, astro_title_str)
-    .eval poke_row = poke_row + 1
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_play_str)
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_quit_str)
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_vol_up_str)
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_vol_down_str)
-    .eval poke_row++
-    .var easy_mode_row = poke_row
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_easy_mode_str)
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_med_mode_str)
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_hard_mode_str)
+    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, astro_titlea_str)
+    .eval poke_row = poke_row + 9
 
-    lda #TITLE_INDICATOR_CHAR
-    ldx background_color
-    nv_screen_poke_color_char_xa(easy_mode_row, TITLE_COL_START)
-    nv_screen_poke_color_char_xa(easy_mode_row+1, TITLE_COL_START)
-    nv_screen_poke_color_char_xa(easy_mode_row+2, TITLE_COL_START)
+    // draw each of the menus including any indicators or other dynamic content
+    DrawGeneral(TITLE_GENERAL_ROW, TITLE_GENERAL_COL)
+    DrawNumPlayers(TITLE_NUM_PLAYERS_ROW, TITLE_NUM_PLAYERS_COL)
+    DrawGameLen(TITLE_GAME_LEN_ROW, TITLE_GAME_LEN_COL)
+    DrawDifficulty(TITLE_DIFFICULTY_ROW, TITLE_DIFFICULTY_COL)
 
-    lda #NV_COLOR_YELLOW
-    ldy astro_diff_mode
-TryAstroEasyMode:
-    cpy #ASTRO_DIFF_EASY
-    bne TryAstroMedMode
-IsAstroEasyMode:
-    nv_screen_poke_color_a(easy_mode_row, TITLE_COL_START)
-    jmp DoneAstroDiffMode
-
-TryAstroMedMode:
-    cpy #ASTRO_DIFF_MED
-    bne TryAstroHardMode
-IsAstroMedMode:
-    nv_screen_poke_color_a(easy_mode_row+1, TITLE_COL_START)
-    jmp DoneAstroDiffMode
-
-TryAstroHardMode:
-    // assume its hard mode if get here
-IsAstroHardMode:
-        nv_screen_poke_color_a(easy_mode_row+2, TITLE_COL_START)
-
-
-DoneAstroDiffMode:
-    .eval poke_row++
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_game_len_str)
-    nv_screen_poke_color_str((poke_row-1), TITLE_COL_START+10, NV_COLOR_CYAN, title_blank4_str)
-
-    // game length
-    nv_screen_poke_hex_word_mem((poke_row-1), TITLE_COL_START+10, astro_score_to_win, false)
-
-    // timed or score based
-    .var score_based_row = poke_row
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_score_based_str)
-    .var timer_based_row = poke_row
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_time_based_str)
-
-    // poke indicator for timed or score based
-    lda #TITLE_INDICATOR_CHAR
-    ldx background_color
-    nv_screen_poke_color_char_xa(score_based_row, TITLE_COL_START)
-    nv_screen_poke_color_char_xa(timer_based_row, TITLE_COL_START)
-    lda #NV_COLOR_YELLOW
-    ldy astro_end_on_seconds
-    beq TitleScoreBasedGame
-TitleTimerBasedGame:
-    nv_screen_poke_color_a(timer_based_row, TITLE_COL_START)
-    jmp TitleTimerScoreBasedDone
-TitleScoreBasedGame:
-    nv_screen_poke_color_a(score_based_row, TITLE_COL_START)
-
-TitleTimerScoreBasedDone:
-
-    // inc/dec game len
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_plus_str)
-    nv_screen_poke_color_str(poke_row++, TITLE_COL_START, NV_COLOR_WHITE, title_minus_str)
-
+    // move the ship in its extra data
     jsr ship_1.MoveInExtraData
     jsr ship_2.MoveInExtraData
 
@@ -261,8 +289,9 @@ TitleNoQuit:
     jmp TitleLoop
 
 TitleDone:
+    // copy score to win to astro_game_seconds in case the user selected timed game
     nv_xfer16_mem_mem(astro_score_to_win, astro_game_seconds)
-    //jsr StarCleanup
+
     lda play_flag
     beq QuitGame
 PlayGame:
@@ -277,16 +306,184 @@ QuitGame:
 // TitleStart end
 //////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+// inline macro to draw the general menu items
+// macro params:
+//   draw_row: the row of the upper left char position for the menu
+//   draw_col: the col of the upper left char position for the menu
+.macro DrawGeneral(draw_row, draw_col)
+{
+    .var cur_row = draw_row
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_1_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_2_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_3_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_4_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_5_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_6_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_general_7_str)
+}
+/////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+// inline macro to draw the game length menu items
+// macro params:
+//   draw_row: the row of the upper left char position for the menu
+//   draw_col: the col of the upper left char position for the menu
+.macro DrawGameLen(draw_row, draw_col)
+{
+    .var cur_row = draw_row
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_game_len_1_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_game_len_2_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_game_len_3_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_game_len_4_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_game_len_5_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_game_len_6_str)
+
+    .const TITLE_TIME_BASED_MARK_ROW = draw_row + 2
+    .const TITLE_TIME_BASED_MARK_COL = draw_col
+    .const TITLE_SCORE_BASED_MARK_ROW = TITLE_TIME_BASED_MARK_ROW + 1
+    .const TITLE_SCORE_BASED_MARK_COL = TITLE_TIME_BASED_MARK_COL
+    .const TITLE_GAME_LEN_ROW = draw_row
+    .const TITLE_GAME_LEN_COL = draw_col + 11
+
+    // print the game length in cyan, first blank out the old value and update color
+    nv_screen_poke_color_str(TITLE_GAME_LEN_ROW, TITLE_GAME_LEN_COL, NV_COLOR_CYAN, title_blank4_str)
+
+    // Now poke the game length to the screen.
+    // During title screen astro_score_to_win is both seconds and points.
+    // when title screen is done it will be copied to astro_game_seconds
+    nv_screen_poke_hex_word_mem(TITLE_GAME_LEN_ROW, TITLE_GAME_LEN_COL, astro_score_to_win, false)
+
+
+    lda #TITLE_INDICATOR_CHAR
+    nv_screen_poke_char_a(TITLE_TIME_BASED_MARK_ROW, TITLE_TIME_BASED_MARK_COL)
+    nv_screen_poke_char_a(TITLE_SCORE_BASED_MARK_ROW, TITLE_SCORE_BASED_MARK_COL)
+
+    nv_beq8_immed(astro_end_on_seconds, 0, IsScoreBased)
+IsTimeBased:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_TIME_BASED_MARK_ROW, TITLE_TIME_BASED_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_SCORE_BASED_MARK_ROW, TITLE_SCORE_BASED_MARK_COL)
+    jmp Done
+
+IsScoreBased:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_SCORE_BASED_MARK_ROW, TITLE_SCORE_BASED_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_TIME_BASED_MARK_ROW, TITLE_TIME_BASED_MARK_COL)
+
+Done:
+}
+//////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////
+// inline macro to draw the difficulty menu items
+// macro params:
+//   draw_row: the row of the upper left char position for the menu
+//   draw_col: the col of the upper left char position for the menu
+.macro DrawDifficulty(draw_row, draw_col)
+{
+    .var cur_row = draw_row
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_difficulty_1_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_difficulty_2_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_difficulty_3_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_difficulty_4_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_difficulty_5_str)
+
+    .const TITLE_DIFF_EASY_MARK_ROW = draw_row + 2
+    .const TITLE_DIFF_EASY_MARK_COL = draw_col
+    .const TITLE_DIFF_MED_MARK_ROW = TITLE_DIFF_EASY_MARK_ROW + 1
+    .const TITLE_DIFF_MED_MARK_COL = TITLE_DIFF_EASY_MARK_COL
+    .const TITLE_DIFF_HARD_MARK_ROW = TITLE_DIFF_MED_MARK_ROW + 1
+    .const TITLE_DIFF_HARD_MARK_COL = TITLE_DIFF_MED_MARK_COL
+
+    lda #TITLE_INDICATOR_CHAR
+    nv_screen_poke_char_a(TITLE_DIFF_EASY_MARK_ROW, TITLE_DIFF_EASY_MARK_COL)
+    nv_screen_poke_char_a(TITLE_DIFF_MED_MARK_ROW, TITLE_DIFF_MED_MARK_COL)
+    nv_screen_poke_char_a(TITLE_DIFF_HARD_MARK_ROW, TITLE_DIFF_HARD_MARK_COL)
+
+TryEasy:
+    nv_bne8_immed(astro_diff_mode, ASTRO_DIFF_EASY, TryMed)
+IsEasy:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_DIFF_EASY_MARK_ROW, TITLE_DIFF_EASY_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_DIFF_MED_MARK_ROW, TITLE_DIFF_MED_MARK_COL)
+    nv_screen_poke_color_a(TITLE_DIFF_HARD_MARK_ROW, TITLE_DIFF_HARD_MARK_COL)
+    jmp Done
+
+TryMed:
+    nv_bne8_immed(astro_diff_mode, ASTRO_DIFF_MED, TryHard)
+IsMed:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_DIFF_MED_MARK_ROW, TITLE_DIFF_MED_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_DIFF_EASY_MARK_ROW, TITLE_DIFF_EASY_MARK_COL)
+    nv_screen_poke_color_a(TITLE_DIFF_HARD_MARK_ROW, TITLE_DIFF_HARD_MARK_COL)
+    jmp Done
+
+TryHard:
+    // assume hard if wasn't easy or medium
+    //nv_bne8_immed(astro_diff_mode, ASTRO_DIFF_HARD, Done)
+IsHard:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_DIFF_HARD_MARK_ROW, TITLE_DIFF_HARD_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_DIFF_EASY_MARK_ROW, TITLE_DIFF_EASY_MARK_COL)
+    nv_screen_poke_color_a(TITLE_DIFF_MED_MARK_ROW, TITLE_DIFF_MED_MARK_COL)
+    // fall through to done
+
+Done:
+}
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// inline macro to draw the number of players menu items
+// macro params:
+//   draw_row: the row of the upper left char position for the menu
+//   draw_col: the col of the upper left char position for the menu
+.macro DrawNumPlayers(draw_row, draw_col)
+{
+    .var cur_row = draw_row
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_num_players_1_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_num_players_2_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_num_players_3_str)
+    nv_screen_poke_color_str(cur_row++, draw_col, NV_COLOR_WHITE, title_text_num_players_4_str)
+
+    .const TITLE_ONE_PLAYER_MARK_ROW = draw_row + 2
+    .const TITLE_ONE_PLAYER_MARK_COL = draw_col
+    .const TITLE_TWO_PLAYER_MARK_ROW = TITLE_ONE_PLAYER_MARK_ROW + 1
+    .const TITLE_TWO_PLAYER_MARK_COL = TITLE_ONE_PLAYER_MARK_COL
+
+    lda #TITLE_INDICATOR_CHAR
+    nv_screen_poke_char_a(TITLE_ONE_PLAYER_MARK_ROW, TITLE_ONE_PLAYER_MARK_COL)
+    nv_screen_poke_char_a(TITLE_TWO_PLAYER_MARK_ROW, TITLE_TWO_PLAYER_MARK_COL)
+
+
+    nv_beq8_immed(astro_single_player_flag, 0, IsTwoPlayer)
+IsOnePlayer:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_ONE_PLAYER_MARK_ROW, TITLE_ONE_PLAYER_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_TWO_PLAYER_MARK_ROW, TITLE_TWO_PLAYER_MARK_COL)
+    jmp Done
+
+IsTwoPlayer:
+    lda #NV_COLOR_YELLOW
+    nv_screen_poke_color_a(TITLE_TWO_PLAYER_MARK_ROW, TITLE_TWO_PLAYER_MARK_COL)
+    lda #NV_COLOR_BLACK
+    nv_screen_poke_color_a(TITLE_ONE_PLAYER_MARK_ROW, TITLE_ONE_PLAYER_MARK_COL)
+
+Done:
+}
+//////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
 // subroutine to do all the keyboard stuff
 TitleDoKeyboard: 
 {
-    //jsr JoyIsAnyActivity
-    //beq TitleNoJoystickActiviity
-    //rts                             // joystick activity, so don't read keyboard
-//TitleNoJoystickActiviity:
     nv_key_scan()
 
     lda key_cool_counter
@@ -359,6 +556,7 @@ TryPlus:
     cmp #TITLE_KEY_LONGER_GAME
     bne TryMinus
 WasPlus:
+    // increment game length (astro_score_to_win) although might represent seconds
     nv_bge16_immed(astro_score_to_win, TITLE_MAX_GAME_LEN-TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
     nv_bcd_adc16_mem_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipAdd:
@@ -368,6 +566,7 @@ TryMinus:
     cmp #TITLE_KEY_SHORTER_GAME
     bne TryTimedGame
 WasMinus:
+    // decrement game length (astro_score_to_win is used for seconds and points in title screen)
     nv_blt16_immed(astro_score_to_win, TITLE_MIN_GAME_LEN+TITLE_GAME_LEN_INC_DEC, TitleGameLenSkipAdd)
     nv_bcd_sbc16_mem_immed(astro_score_to_win, TITLE_GAME_LEN_INC_DEC, astro_score_to_win)
 TitleGameLenSkipSub:
@@ -383,11 +582,23 @@ WasTimedGame:
 
 TryScoredGame:
     cmp #TITLE_KEY_SCORED_GAME
-    bne TryHelp
+    bne TryOnePlayer
 WasScoredGame:
     lda #0
     sta astro_end_on_seconds
     jmp TitleDoneKeys                // and skip to bottom
+
+TryOnePlayer:
+    nv_bne8_immed_a(TITLE_KEY_ONE_PLAYER, TryTwoPlayer)
+WasOnePlayer:
+    lda #1 
+    sta astro_single_player_flag
+
+TryTwoPlayer:
+    nv_bne8_immed_a(TITLE_KEY_TWO_PLAYER, TryHelp)
+WasTwoPlayer:
+    lda #0
+    sta astro_single_player_flag
 
 TryHelp:
     nv_bne8_immed_a(TITLE_KEY_HELP, TryPlay)
@@ -420,18 +631,17 @@ TitleDoneKeys:
 
 
 //////////////////////////////////////////////////////////////////////////////
-//
+// subroutine to show the help screen.  
 TitleDoHelp:
 {
+    // disable ship sprites
     jsr ship_1.Disable
     jsr ship_2.Disable
 
-    //jsr StarForceStop
-    //jsr StarCleanup
+    // display the help
     jsr HelpStart
-    //jsr StarInit
-    //jsr StarStart
 
+    // re enable the ship sprites
     jsr ship_1.Enable
     jsr ship_2.Enable
 

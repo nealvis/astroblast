@@ -21,7 +21,7 @@ background_color: .byte NV_COLOR_BLACK
 frame_counter: .word 0
 second_counter: .word 0
 astro_game_seconds: .word 0         // BCD game end seconds count down to zero
-astro_end_on_seconds: .byte 0        // if zero then play until score reached, 
+astro_end_on_seconds: .byte 0       // if zero then play until score reached, 
                                     // if non zero then play till seconds reached
 change_up_counter: .word 0
 second_partial_counter: .word 0
@@ -76,4 +76,6 @@ astro_joy2_no_fire_flag: .byte 1
 ship_2_next_possible_bounce_frame: .word $0000
 ship_1_next_possible_bounce_frame: .word $0000
 
+// if zero then in normal two player mode
+// if nonzero then in single player mode
 astro_single_player_flag: .byte 1
