@@ -1229,24 +1229,7 @@ Joy1NotFiring:
     // fall through to joy2tryfire
 
 Joy2TryFire:
-    ldx #JOY_PORT_2_ID
-    jsr JoyIsFiring
-    beq Joy2NotFiring
-Joy2IsFiring:
-    lda astro_joy2_no_fire_flag
-    beq Joy1TryLeft
-    jsr TurretLdaSmartFireTopID
-    jsr TurretStartIfArmed          
-    jmp Joy1TryLeft
-
-Joy2NotFiring:
-    jsr TurretCurrentlyArmedLda 
-    beq Joy1TryLeft
-    // here the joy stick not firing but turret is armed
-    // set the not firing flag
-    lda #$01
-    sta astro_joy2_no_fire_flag
-    // fall through to joy1 try left
+    jsr Player2CheckFire
 
 Joy1TryLeft:
     ldx #JOY_PORT_1_ID
@@ -1274,6 +1257,65 @@ Joy1TryDown:
     jsr DoShield
 Joy1Done:
 
+Joy2CheckDirection:
+jsr Player2CheckDirection
+
+
+JoyDone:
+    rts
+}
+// DoJoystick - end
+//////////////////////////////////////////////////////////////////////////////
+
+Player2CheckFire:
+{
+    nv_beq8_immed(astro_single_player_flag, 0, Player2ManualCheckFire)
+    jsr Player2AICheckFire
+    rts
+    
+Player2ManualCheckFire:
+Joy2TryFire:
+    ldx #JOY_PORT_2_ID
+    jsr JoyIsFiring
+    beq Joy2NotFiring
+Joy2IsFiring:
+    lda astro_joy2_no_fire_flag
+    beq Done
+    jsr TurretLdaSmartFireTopID
+    jsr TurretStartIfArmed          
+    jmp Done
+
+Joy2NotFiring:
+    jsr TurretCurrentlyArmedLda 
+    beq Done
+    // here the joy stick not firing but turret is armed
+    // set the not firing flag
+    lda #$01
+    sta astro_joy2_no_fire_flag
+    // fall through to joy1 try left
+
+Done:
+    rts
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// fire the turret for player 2 when in Single Player Mode.
+Player2AICheckFire:
+{
+    //jsr TurretLdaSmartFireTopID
+    //jsr TurretStartIfArmed          
+    rts
+}
+
+///////////////////////////////////////////////////////////////////////////////
+Player2CheckDirection:
+{
+    nv_beq8_immed(astro_single_player_flag, 0, Player2ManualCheckDirection)
+    jsr Player2AICheckDirection
+    rts
+
+Player2ManualCheckDirection:
 Joy2TryLeft:
     ldx #JOY_PORT_2_ID
     jsr JoyIsLeft
@@ -1301,11 +1343,14 @@ Joy2TryDown:
 
 Joy2Done:
 
-JoyDone:
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// fire the turret for player 2 when in Single Player Mode.
+Player2AICheckDirection:
+{
     rts
 }
-// DoJoystick - end
-//////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
 // call to determine if its time to start a wind gust.  if it is time then
