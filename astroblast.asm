@@ -1267,12 +1267,18 @@ JoyDone:
 // DoJoystick - end
 //////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////
+// subroutine to check if player2 is firing.  If two player mode will check
+// joystick, if single player mode then will us "AI" to determine if should
+// fire the joystick
 Player2CheckFire:
 {
+    // check for single player mode / AI first
     nv_beq8_immed(astro_single_player_flag, 0, Player2ManualCheckFire)
     jsr Player2AICheckFire
     rts
     
+// if get here then in two player mode, just check physical joystick
 Player2ManualCheckFire:
 Joy2TryFire:
     ldx #JOY_PORT_2_ID
@@ -1303,9 +1309,37 @@ Done:
 // fire the turret for player 2 when in Single Player Mode.
 Player2AICheckFire:
 {
-    //jsr TurretLdaSmartFireTopID
-    //jsr TurretStartIfArmed          
+
+    lda astro_diff_mode
+    nv_beq8_immed_a(ASTRO_DIFF_HARD, HardMode)
+    nv_beq8_immed_a(ASTRO_DIFF_MED, MedMode)
+    // must be easy mode
+
+EasyMode:
+    nv_sbc16(astro_auto_turret_next_shot_frame, frame_counter, temp_result)
+    nv_bgt16_immed(temp_result, 60, Done)
+    jsr TurretLdaSmartFireTopID
+    jsr TurretStartIfArmed
     rts
+    
+MedMode: 
+    nv_sbc16(astro_auto_turret_next_shot_frame, frame_counter, temp_result)
+    nv_bgt16_immed(temp_result, 120, Done)
+    jsr TurretLdaSmartFireTopID
+    jsr TurretStartIfArmed
+    rts
+    
+HardMode:
+    nv_sbc16(astro_auto_turret_next_shot_frame, frame_counter, temp_result)
+    nv_bgt16_immed(temp_result, 25, Done)
+    jsr TurretLdaSmartFireTopID
+    jsr TurretStartIfArmed
+    //rts
+    
+Done:
+    rts
+
+temp_result: .word $0000
 }
 
 ///////////////////////////////////////////////////////////////////////////////
