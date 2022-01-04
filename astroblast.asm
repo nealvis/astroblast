@@ -874,6 +874,7 @@ TryEasy:
 IsEasy:
     // Set easy mode params here
     nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY)
+    nv_store16_immed(astro_ai_turret_frames_before_auto, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY)
     jmp DoneDiffParams
 
 TryMed:
@@ -882,19 +883,22 @@ TryMed:
 IsMed:
     // Set medium mode params here
     nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_MED)
+    nv_store16_immed(astro_ai_turret_frames_before_auto, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_MED)
+
     jmp DoneDiffParams
 
 TryHard:
     // if wasn't easy or medium, assume hard
     // set hard mode params here
     nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_HARD)
-
-
+    nv_store16_immed(astro_ai_turret_frames_before_auto, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_HARD)
     // fall through to done
+
 DoneDiffParams:
     nv_adc16x(frame_counter, astro_auto_turret_wait_frames, 
-             astro_auto_turret_next_shot_frame)
-
+              astro_auto_turret_next_shot_frame)
+    nv_sbc16(astro_auto_turret_next_shot_frame, astro_ai_turret_frames_before_auto, 
+             astro_ai_turret_next_shot_frame)
     rts
 }
 
@@ -1309,37 +1313,16 @@ Done:
 // fire the turret for player 2 when in Single Player Mode.
 Player2AICheckFire:
 {
-
-    lda astro_diff_mode
-    nv_beq8_immed_a(ASTRO_DIFF_HARD, HardMode)
-    nv_beq8_immed_a(ASTRO_DIFF_MED, MedMode)
-    // must be easy mode
-
-EasyMode:
-    nv_sbc16(astro_auto_turret_next_shot_frame, frame_counter, temp_result)
-    nv_bgt16_immed(temp_result, 60, Done)
+    // the astro_ai_turret_next_shot_frame should already be set to the frame
+    // on which the ai should fire the turret, just compare the current
+    // frame counter with that frame to see if its time for ai to fire.
+    nv_bgt16(astro_ai_turret_next_shot_frame, frame_counter, Done)
     jsr TurretLdaSmartFireTopID
     jsr TurretStartIfArmed
-    rts
-    
-MedMode: 
-    nv_sbc16(astro_auto_turret_next_shot_frame, frame_counter, temp_result)
-    nv_bgt16_immed(temp_result, 120, Done)
-    jsr TurretLdaSmartFireTopID
-    jsr TurretStartIfArmed
-    rts
-    
-HardMode:
-    nv_sbc16(astro_auto_turret_next_shot_frame, frame_counter, temp_result)
-    nv_bgt16_immed(temp_result, 25, Done)
-    jsr TurretLdaSmartFireTopID
-    jsr TurretStartIfArmed
-    //rts
     
 Done:
     rts
 
-temp_result: .word $0000
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1439,7 +1422,12 @@ TurretIsArmedCanStart:
     // 16 bit limit it rolls around to some small number but so does
     // the frame counter so that should be fine.
 
+    // Now set the astro_ai_turret_next_shot_frame
+    nv_sbc16(astro_auto_turret_next_shot_frame, astro_ai_turret_frames_before_auto, 
+             astro_ai_turret_next_shot_frame)
+
     jsr TurretArmStart              // start arming the turret again
+
 TurretNotArmedCantStart:
     rts
 }
@@ -1802,6 +1790,7 @@ LoadEnabledToA:
         rts
 
 SetBounceAllOn:
+.break
 .break
         nv_sprite_set_all_actions_sr(info, NV_SPRITE_ACTION_BOUNCE)
 
