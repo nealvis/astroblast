@@ -55,16 +55,22 @@ astro_auto_turret_wait_frames: .word ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY
 astro_auto_turret_next_shot_frame: .word ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY
 
 // the number of frames before auto fire that the AI should kick in
-.const ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY = ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY * 0.25
-.const ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_MED = ASTRO_AUTO_TURRET_WAIT_FRAMES_MED * 0.25
-.const ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_HARD = ASTRO_AUTO_TURRET_WAIT_FRAMES_HARD * 0.25
+.const ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY = 120 //ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY * 0.25
+.const ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_MED = 120  //ASTRO_AUTO_TURRET_WAIT_FRAMES_MED * 0.25
+.const ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_HARD = 120 //ASTRO_AUTO_TURRET_WAIT_FRAMES_HARD * 0.25
 
 // when/if this frame is processed the ai should fire the turret for player 2
 // this is reset after ever turret fire.
 astro_ai_turret_next_shot_frame: .word ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY - ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY
+
 // subtract this from the astro_auto_turret_next_shot_frame to get next ai firing frame.
-// this can be reset after every turret fire to add some randomness
+// This can be reset after every turret fire to add some randomness
 astro_ai_turret_frames_before_auto: .word ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY
+
+// This is the baseline number of frames to subtract from astro_auto_turret_next_shot_frame
+// to get the ai fire frame.  take this number and subtract some random number from it
+// and set astro_ai_turret_frames_before_auto every timet the turret is fired.
+astro_ai_turret_frames_before_auto_base: .word ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY
 
 
 // this is the score required to win the game it in BCD format

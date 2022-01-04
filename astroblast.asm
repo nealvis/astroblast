@@ -93,7 +93,7 @@ RunGame:
 
     .var showTiming = false
     .var showFrameCounters = false
-    .var showSecondCounter = true
+    .var showSecondCounter = false
     jsr StarStart
 
     // display timer with initial value if time based game
@@ -865,6 +865,7 @@ WinnerGotKey:
 //////////////////////////////////////////////////////////////////////////////
 // subroutine to set the program parameters based on the difficulty 
 // option specified on title screen
+// NPS single player
 AstroSetDiffParams:
 {
     lda astro_diff_mode
@@ -875,6 +876,7 @@ IsEasy:
     // Set easy mode params here
     nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_EASY)
     nv_store16_immed(astro_ai_turret_frames_before_auto, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY)
+    nv_store16_immed(astro_ai_turret_frames_before_auto_base, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_EASY)
     jmp DoneDiffParams
 
 TryMed:
@@ -884,7 +886,7 @@ IsMed:
     // Set medium mode params here
     nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_MED)
     nv_store16_immed(astro_ai_turret_frames_before_auto, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_MED)
-
+    nv_store16_immed(astro_ai_turret_frames_before_auto_base, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_MED)
     jmp DoneDiffParams
 
 TryHard:
@@ -892,6 +894,7 @@ TryHard:
     // set hard mode params here
     nv_store16_immed(astro_auto_turret_wait_frames, ASTRO_AUTO_TURRET_WAIT_FRAMES_HARD)
     nv_store16_immed(astro_ai_turret_frames_before_auto, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_HARD)
+    nv_store16_immed(astro_ai_turret_frames_before_auto_base, ASTRO_AI_TURRET_FRAMES_BEFORE_AUTO_HARD)
     // fall through to done
 
 DoneDiffParams:
@@ -1422,14 +1425,22 @@ TurretIsArmedCanStart:
     // 16 bit limit it rolls around to some small number but so does
     // the frame counter so that should be fine.
 
+    // NPS single player
+    // now reset the frames before auto to include different randomness
+    nv_rand_byte_a(true)
+    sta random_frames
+    // assume that MSB of random_frames is still zero.
+    nv_sbc16(astro_ai_turret_frames_before_auto_base, random_frames, astro_ai_turret_frames_before_auto)
     // Now set the astro_ai_turret_next_shot_frame
     nv_sbc16(astro_auto_turret_next_shot_frame, astro_ai_turret_frames_before_auto, 
              astro_ai_turret_next_shot_frame)
 
-    jsr TurretArmStart              // start arming the turret again
+   jsr TurretArmStart              // start arming the turret again
 
 TurretNotArmedCantStart:
     rts
+
+random_frames: .word $0000    
 }
 // TurretStartIfArmed - end
 //////////////////////////////////////////////////////////////////////////////
