@@ -1367,8 +1367,67 @@ Joy2Done:
 
 ///////////////////////////////////////////////////////////////////////////////
 // fire the turret for player 2 when in Single Player Mode.
+// NPS Single player
 Player2AICheckDirection:
 {
+
+    // set rect left to be the right most of the ship (x_loc + 24)
+    nv_adc16x_mem_immed(ship_2.x_loc, 24, nv_sprite_check_overlap_rect_left)
+
+    // set rect top to be the ship top (y_loc) its stored as an 8 bit number so 
+    // set the high byte of the top in the rect to 0 explicitly
+    lda ship_2.y_loc
+    sta nv_sprite_check_overlap_rect_top
+    lda #0 
+    sta nv_sprite_check_overlap_rect_top + 1
+
+    // set rect right to be 100 pixels infront of the the ship.
+    nv_adc16x_mem_immed(nv_sprite_check_overlap_rect_left, 100, nv_sprite_check_overlap_rect_right)
+
+    // set rect bottom to be the same as the ship sprite bottom (y_top + 21) 
+    lda #21
+    nv_adc16x_mem16x_a8u(nv_sprite_check_overlap_rect_top, nv_sprite_check_overlap_rect_bottom)
+
+    // now check asteroids to see if need to speed up to hit them.
+    // note that some asteroids may be floating around but not visible.
+    // should probably not speed up for those asteroids, although it does add some unpredictability
+
+    // check asteroid 1 in front of ship
+    jsr asteroid_1.LoadExtraPtrToRegs
+    jsr NvSpriteCheckOverlapRect
+    beq NoOverlapAster1
+    jsr ship_2.IncVelX          // inc the ship X velocity
+    rts
+
+NoOverlapAster1:
+    // check asteroid 2 in front of ship
+    jsr asteroid_2.LoadExtraPtrToRegs
+    jsr NvSpriteCheckOverlapRect
+    beq NoOverlapAster2
+    jsr ship_2.IncVelX          // inc the ship X velocity
+    rts
+
+NoOverlapAster2:
+    // check asteroid 3 in front of ship
+    jsr asteroid_3.LoadExtraPtrToRegs
+    jsr NvSpriteCheckOverlapRect
+    beq NoOverlapAster3
+    jsr ship_2.IncVelX          // inc the ship X velocity
+    rts
+
+NoOverlapAster3:
+
+CheckTooFast:
+   nv_blt8_immed(ship_2.x_vel, 2, CheckTooSlow)
+   jsr ship_2.DecVelX          // inc the ship X velocity
+   rts
+
+CheckTooSlow:
+   // check if x vel is less than 2 and inc if it is
+   nv_bge8_immed(ship_2.x_vel, 2, XVelOk)
+    jsr ship_2.IncVelX          // inc the ship X velocity
+
+XVelOk:
     rts
 }
 
