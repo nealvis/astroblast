@@ -1392,7 +1392,13 @@ Player2AICheckDirection:
     // note that some asteroids may be floating around but not visible.
     // should probably not speed up for those asteroids, although it does add some unpredictability
 
+    
+    //lda astro_diff_mode
+    //cmp #ASTRO_DIFF_EASY                                                                                                                                                                                                                                                      
+    
     // check asteroid 1 in front of ship
+    jsr asteroid_1.LoadEnabledToA
+    beq NoOverlapAster1
     jsr asteroid_1.LoadExtraPtrToRegs
     jsr NvSpriteCheckOverlapRect
     beq NoOverlapAster1
@@ -1401,6 +1407,8 @@ Player2AICheckDirection:
 
 NoOverlapAster1:
     // check asteroid 2 in front of ship
+    jsr asteroid_2.LoadEnabledToA
+    beq NoOverlapAster2
     jsr asteroid_2.LoadExtraPtrToRegs
     jsr NvSpriteCheckOverlapRect
     beq NoOverlapAster2
@@ -1409,6 +1417,8 @@ NoOverlapAster1:
 
 NoOverlapAster2:
     // check asteroid 3 in front of ship
+    jsr asteroid_3.LoadEnabledToA
+    beq NoOverlapAster3
     jsr asteroid_3.LoadExtraPtrToRegs
     jsr NvSpriteCheckOverlapRect
     beq NoOverlapAster3
@@ -1416,6 +1426,26 @@ NoOverlapAster2:
     rts
 
 NoOverlapAster3:
+    // check asteroid 4 in front of ship
+    jsr asteroid_4.LoadEnabledToA
+    beq NoOverlapAster4
+    jsr asteroid_4.LoadExtraPtrToRegs
+    jsr NvSpriteCheckOverlapRect
+    beq NoOverlapAster4
+    jsr ship_2.IncVelX          // inc the ship X velocity
+    rts
+
+NoOverlapAster4:
+    // check asteroid 5 in front of ship
+    jsr asteroid_5.LoadEnabledToA
+    beq NoOverlapAster5
+    jsr asteroid_5.LoadExtraPtrToRegs
+    jsr NvSpriteCheckOverlapRect
+    beq NoOverlapAster5
+    jsr ship_2.IncVelX          // inc the ship X velocity
+    rts
+
+NoOverlapAster5:
 
 CheckTooFast:
    nv_blt8_immed(ship_2.x_vel, 2, CheckTooSlow)
