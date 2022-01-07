@@ -1371,8 +1371,8 @@ Joy2Done:
 Player2AICheckDirection:
 {
 
-    // set rect left to be the right most of the ship (x_loc + 24)
-    nv_adc16x_mem_immed(ship_2.x_loc, 24, nv_sprite_check_overlap_rect_left)
+    // set rect left to be the right most of the ship + some
+    nv_adc16x_mem_immed(ship_2.x_loc, 40, nv_sprite_check_overlap_rect_left)
 
     // set rect top to be the ship top (y_loc) its stored as an 8 bit number so 
     // set the high byte of the top in the rect to 0 explicitly
@@ -1380,23 +1380,46 @@ Player2AICheckDirection:
     sta nv_sprite_check_overlap_rect_top
     lda #0 
     sta nv_sprite_check_overlap_rect_top + 1
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_top, 10, nv_sprite_check_overlap_rect_top)
 
     // set rect right to be 100 pixels infront of the the ship.
-    nv_adc16x_mem_immed(nv_sprite_check_overlap_rect_left, 100, nv_sprite_check_overlap_rect_right)
+    nv_adc16x_mem_immed(nv_sprite_check_overlap_rect_left, 150, nv_sprite_check_overlap_rect_right)
 
-    // set rect bottom to be the same as the ship sprite bottom (y_top + 21) 
-    lda #21
+    // set rect bottom to be the same as the ship sprite bottom + something) 
+    lda #40
     nv_adc16x_mem16x_a8u(nv_sprite_check_overlap_rect_top, nv_sprite_check_overlap_rect_bottom)
 
     // now check asteroids to see if need to speed up to hit them.
     // note that some asteroids may be floating around but not visible.
     // should probably not speed up for those asteroids, although it does add some unpredictability
 
-    
-    //lda astro_diff_mode
-    //cmp #ASTRO_DIFF_EASY                                                                                                                                                                                                                                                      
-    
+    // if its hard mode then just start checking for asteroids in front of the ship    
+    nv_beq8_immed_far(astro_diff_mode, ASTRO_DIFF_HARD, HardMode)
+
+    // if we get here its medium mode or easy mode.
+    // make the overlap rect smaller for each, start by assuming medium mode
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_top, 10, nv_sprite_check_overlap_rect_top)
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_left, 10, nv_sprite_check_overlap_rect_left)
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_right, 40, nv_sprite_check_overlap_rect_right)
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_bottom, 10, nv_sprite_check_overlap_rect_bottom)
+
+    nv_beq8_immed(astro_diff_mode, ASTRO_DIFF_MED, CheckAster2)
+
+    // if we get here its easy mode
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_top, 10, nv_sprite_check_overlap_rect_top)
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_left, 10, nv_sprite_check_overlap_rect_left)
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_right, 40, nv_sprite_check_overlap_rect_right)
+    nv_sbc16_mem_immed(nv_sprite_check_overlap_rect_bottom, 10, nv_sprite_check_overlap_rect_bottom)
+    jmp CheckAster3
+
     // check asteroid 1 in front of ship
+HardMode:
+    jsr TurretCurrentlyArmedLda
+    beq CheckAster1
+    lda #$02
+    jsr DoShield
+
+CheckAster1:
     jsr asteroid_1.LoadEnabledToA
     beq NoOverlapAster1
     jsr asteroid_1.LoadExtraPtrToRegs
@@ -1405,6 +1428,7 @@ Player2AICheckDirection:
     jsr ship_2.IncVelX          // inc the ship X velocity
     rts
 
+CheckAster2:
 NoOverlapAster1:
     // check asteroid 2 in front of ship
     jsr asteroid_2.LoadEnabledToA
@@ -1415,6 +1439,7 @@ NoOverlapAster1:
     jsr ship_2.IncVelX          // inc the ship X velocity
     rts
 
+CheckAster3:
 NoOverlapAster2:
     // check asteroid 3 in front of ship
     jsr asteroid_3.LoadEnabledToA
@@ -1425,8 +1450,9 @@ NoOverlapAster2:
     jsr ship_2.IncVelX          // inc the ship X velocity
     rts
 
+CheckAster4:
 NoOverlapAster3:
-    // check asteroid 4 in front of ship
+    // check asteroid 4 in front of shipp
     jsr asteroid_4.LoadEnabledToA
     beq NoOverlapAster4
     jsr asteroid_4.LoadExtraPtrToRegs
@@ -1435,6 +1461,7 @@ NoOverlapAster3:
     jsr ship_2.IncVelX          // inc the ship X velocity
     rts
 
+CheckAster5:
 NoOverlapAster4:
     // check asteroid 5 in front of ship
     jsr asteroid_5.LoadEnabledToA
@@ -1458,6 +1485,8 @@ CheckTooSlow:
     jsr ship_2.IncVelX          // inc the ship X velocity
 
 XVelOk:
+
+Done:
     rts
 }
 
