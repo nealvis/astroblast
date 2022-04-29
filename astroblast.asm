@@ -53,7 +53,6 @@ nv_b8_label: .text @"nv b8 coll sprite: \$00"
 *=$1000 "Main Start"
 
     jmp RealStart
-#import "astro_wind_code.asm"
 #import "../nv_c64_util/nv_screen_code.asm"
 #import "../nv_c64_util/nv_sprite_raw_collisions_code.asm"
 #import "../nv_c64_util/nv_sprite_raw_code.asm"
@@ -2320,3 +2319,4 @@ DebugShipCollisionSprite:
     rts
 */
 #import "astro_sound.asm"
+#import "astro_wind_code.asm"
